@@ -10,5 +10,8 @@ run:
 	gcc ${FLAGS} ${NAME}
 	./a.out
 
+eratosthenes:
+	gcc ${FLAGS} eratosthenes.c -lm
+
 x32:
 	gcc ${FLAGS} -m32 ${NAME}

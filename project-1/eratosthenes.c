@@ -5,27 +5,56 @@
 #include "bitset.h"
 
 #define BITSIZE 100
+#define SIZE 50000000
 
-void sieve(size_t el_count) {
-    (void) el_count;
-    // bitset_t bitarr[10];
-    // // bitset_create(bitarr, el_count);
-    // // bitset_alloc(bitarr, el_count);
+void sieve(const size_t el_count) {
 
-    // for (size_t i = 0; i < el_count; i++) {
-    //     bitarr[i] = 1;
-    // } 
+    bitset_create(bitarr, 100);
 
-    // // bitarr[0] = 1;
-    // // bitarr[1] = 1;
+    for (size_t i = 1; i < el_count; i++) {
+        bitset_setbit(bitarr, i, 1);
+    }
 
-    // for (size_t i = 0; i < sqrt(el_count); i++) {
-    //     if (bitarr[i]) {
-    //         for (size_t j = pow(i, 2); j < el_count; j += i) {
-    //             bitarr[j] = 0;
-    //         }
-    //     }
-    // }
+    for (size_t i = 2; i < sqrt(el_count); i++) {
+        if (bitset_getbit(bitarr, i)) {
+            for (size_t j = i * i; j < el_count; j += i) {
+                bitset_setbit(bitarr, j, 0);
+            }
+        }
+    }
+
+    for (size_t i = 0; i < bitset_size(bitarr); i++) {
+        if (bitset_getbit(bitarr, i)) {
+            printf("Prime: %d\n", i);
+        }
+    }
+
+    return bitarr;
+}
+
+/**
+ * @brief Algorithm for getting prime numbers 
+ */
+void pepe_sieve(const size_t el_count) {
+    bitset_create(bitarr, SIZE);
+ 
+    bitset_setbit(bitarr, 0, 1);
+    bitset_setbit(bitarr, 1, 1);
+
+    for (size_t i = 2; i <= sqrt(el_count); i++) {
+        if (!bitset_getbit(bitarr, i)) {
+            for (size_t j = i*i; j <= el_count; j += i) {
+                bitset_setbit(bitarr, j, 1);
+            }
+        }
+    }
+
+    for (size_t i = el_count, n = 5; (i > 0) && n; i--) {
+        if (!bitset_getbit(bitarr, i)) {
+            printf("Prime: %d\n", i);
+            n--;
+        }
+    }
 }
 
 int main() {
@@ -42,11 +71,11 @@ int main() {
         printf("arr[%lu]: %lu\n", i, bitarr[i]);
     }
 
-    for (bitset_index_t i = 0; i < 3; i++) {
+    for (bitset_index_t i = 0; i < 32; i++) {
         bitset_setbit(bitarr, i, 1);
     }
 
-    for (bitset_index_t i = 64; i < 67; i++) {
+    for (bitset_index_t i = 64; i < 96; i++) {
         bitset_setbit(bitarr, i, 1);
     }
 
@@ -63,6 +92,10 @@ int main() {
         printf("ultimate val: %lu\n", bitarr[i]);
     }
     printf("bitsize: %lu\n", bitset_size(bitarr));
+
+    // sieve(100);
+    printf("\n");
+    pepe_sieve(SIZE);
 
     return 0;
 }

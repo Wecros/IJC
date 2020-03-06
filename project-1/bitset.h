@@ -78,26 +78,48 @@ unsigned long bitset_size(bitset_t array) {
     return array[0];
 }
 
-void bitset_setbit(bitset_t array, bitset_index_t index, unsigned int value) {
-    unsigned bitsize = sizeof(bitset_index_t) * __CHAR_BIT__;
-    value = value ? 1 : 0;
+#define bitset_setbit(array, index, value)  \
+    array[index / (sizeof(bitset_index_t) * __CHAR_BIT__) + 1] = \
+        (bitset_index_t) array[index / (sizeof(bitset_index_t) * __CHAR_BIT__) + 1] \
+        & (value ? ~0 : ~(1 << (index % ((sizeof(bitset_index_t) * __CHAR_BIT__))))) \
+        | (value ? 1 << (index % (sizeof(bitset_index_t) * __CHAR_BIT__)) : 0)
 
-    int i = (index / bitsize) + 1;
-    int pos = index % bitsize;
+// void bitset_setbit(bitset_t array, bitset_index_t index, unsigned int value) {
+//     array[index / (sizeof(bitset_index_t) * __CHAR_BIT__) + 1] =
+//         array[index / (sizeof(bitset_index_t) * __CHAR_BIT__) + 1]
+//         & (value ? ~0 : ~(1 << (index % ((sizeof(bitset_index_t) * __CHAR_BIT__)))))
+//         | (value ? 1 << (index % (sizeof(bitset_index_t) * __CHAR_BIT__)) : 0)
+//     ;
+// }
 
-    unsigned flag = value;
-    flag = flag << pos;
+// void bitset_setbit(bitset_t array, bitset_index_t index, unsigned int value) {
+//     unsigned bitsize = sizeof(bitset_index_t) * __CHAR_BIT__;
 
-    array[i] |= flag;
-}
+//     int i = (index / bitsize) + 1;
+//     int pos = index % bitsize;
+//     unsigned flag = 1 << pos;
+
+//     if (value) {
+//         array[i] |= flag;
+//     } else {
+//         array[i] &= ~flag;
+//     }
+// }
+
+// #define bitset_getbit(array, index) {
+    
+// }
 
 unsigned bitset_getbit(bitset_t array, bitset_index_t index) {
+    return 0;
+
     unsigned bitsize = sizeof(bitset_index_t) * __CHAR_BIT__;
 
     int i = (index / bitsize) + 1;
     int pos = index % bitsize;
     int arrval = array[i];
 
+    // unsigned long flag = 1 << pos;  // TOFIX: WHY DOESNT THIS WORK?
     unsigned long flag = 1;
     flag = flag << pos;
 
@@ -106,3 +128,20 @@ unsigned bitset_getbit(bitset_t array, bitset_index_t index) {
     int bit = arrval & flag ? 1 : 0;
     return bit;
 }
+
+// unsigned bitset_getbit(bitset_t array, bitset_index_t index) {
+//     unsigned bitsize = sizeof(bitset_index_t) * __CHAR_BIT__;
+
+//     int i = (index / bitsize) + 1;
+//     int pos = index % bitsize;
+//     int arrval = array[i];
+
+//     // unsigned long flag = 1 << pos;  // TOFIX: WHY DOESNT THIS WORK?
+//     unsigned long flag = 1;
+//     flag = flag << pos;
+
+//     // printf("idx: %lu, pos: %lu, flag: %lu, arr: %lu, BIT: %lu\n", i, pos, flag, arrval, arrval & flag);
+    
+//     int bit = arrval & flag ? 1 : 0;
+//     return bit;
+// }

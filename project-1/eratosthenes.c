@@ -46,16 +46,14 @@ int main() {
         bitset_setbit(bitarr, i, 1);
     }
 
-    // bitset_setbit(bitarr, 1, 0);
-
     for (bitset_index_t i = 64; i < 67; i++) {
         bitset_setbit(bitarr, i, 1);
     }
 
-    // bitset_setbit(bitarr, 87, 1);
-    // bitset_setbit(bitarr, 87, 0);
-    // bitset_setbit(bitarr, 86, 1);
-    // bitset_setbit(bitarr, 88, 1);
+    bitset_setbit(bitarr, 87, 1);
+    bitset_setbit(bitarr, 87, 0);
+    bitset_setbit(bitarr, 86, 1);
+    bitset_setbit(bitarr, 88, 1);
 
     for (bitset_index_t i = 0; i < 100; i++) {
         printf("val [%lu]: %u\n", i, bitset_getbit(bitarr, i));

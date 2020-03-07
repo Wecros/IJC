@@ -6,83 +6,58 @@
 typedef unsigned long bitset_index_t;
 typedef bitset_index_t * bitset_t; 
 
-// #define bitset_create(array, size)  ( size % (sizeof(bitset_index_t) * __CHAR_BIT__) ? \
-//     bitset_t array[size / (sizeof(bitset_index_t) * __CHAR_BIT__) + 2] : \
-//     bitset_t array[size / (sizeof(bitset_index_t) * __CHAR_BIT__) + 1] )
+#define BITSIZE (sizeof(bitset_index_t) * __CHAR_BIT__)
 
-#define bitset_create(array, size)  bitset_t bitarr[size / (sizeof(bitset_index_t) * __CHAR_BIT__) \
+/**
+ * @brief Macro for creating bitset array.
+ * @param array Name of the bitset.
+ * @param size Size of the array in bits.
+ */
+#define bitset_create(array, size)  bitset_t array[size / (sizeof(bitset_index_t) * __CHAR_BIT__) \
     + ((size % (sizeof(bitset_index_t) * __CHAR_BIT__)) ? 2 : 1)] = {size}
 
-// #define bitset_create(array, size) do { \
-//     unsigned bitsize = sizeof(bitset_index_t) * __CHAR_BIT__; \
-//     bitset_t array[size / bitsize + bitsize % 32 ? 1 : 2]; \
-//     for (size_t i = 0; i < size / bitsize; i++) array[i] = 0; \
-//     array[0] = size; \
-// } while (0)
+/**
+ * @brief Macro for creating a dynamic bitset array.
+ * @param array Name of the bitset.
+ * @param size Size of the array in bits.
+ */
+#define bitset_alloc(array, size) \
+    bitset_t array = calloc(size, sizeof(bitset_index_t))
 
-// #define bitset_create(array, size) do { \
-//     unsigned bitsize = sizeof(bitset_index_t) * __CHAR_BIT__; \
-//     bitset_t array[size / bitsize + bitsize % 32 ? 1 : 2]; \
-//     for (size_t i = 0; i < size / bitsize; i++) array[i] = 0; \
-//     array[0] = size; \
-// } while (0)
+/**
+ * @brief Macro for freeing a dynamic bitset array.
+ * @param array Name of the bitset.
+ */
+#define bitset_free(array) free(array)
 
+/**
+ * @brief Macro for getting the bitset's size.
+ * @param array Name of the bitset.
+ */
+#define bitset_size(array) array[0]
 
-// #define bitset_create(array, size) ();
-    //    definuje a _nuluje_ proměnnou jmeno_pole
-    //    (POZOR: opravdu musí _INICIALIZOVAT_ pole bez ohledu na
-    //    to, zda je pole statické nebo automatické/lokální!
-    //    Vyzkoušejte obě varianty, v programu použijte lokální pole.)
-    //    Použijte  static_assert  pro kontrolu velikosti pole.
-    //    Př: static bitset_create(p,100); // p = pole 100 bitů, nulováno
-    //        bitset_create(q,100000L);    // q = pole 100000 bitů, nulováno
-    //        bitset_create(q,-100);       // chyba při překladu
-
-// #define bitset_alloc(array, size);
-    //    definuje proměnnou jmeno_pole tak, aby byla kompatibilní s polem
-    //    vytvořeným pomocí bitset_create, ale pole bude alokováno dynamicky.
-    //    Př: bitset_alloc(q,100000L); // q = pole 100000 bitů, nulováno
-    //    Použijte  assert  pro kontrolu maximální možné velikosti pole.
-    //    Pokud alokace selže, ukončete program s chybovým hlášením:
-    //    "bitset_alloc: Chyba alokace paměti"
-    
-// #define bitset_free(array);
-    //    uvolní paměť dynamicky alokovaného pole
-
-// #define bitset_size(array);
-    //    vrátí deklarovanou velikost pole v bitech (uloženou v poli)
-
-// #define bitset_setbit(array, index, value) (array[(index/32)] |= (value << (index % 32)))
-    //  bitset_setbit(jmeno_pole,index,výraz)
-    //    nastaví zadaný bit v poli na hodnotu zadanou výrazem
-    //    (nulový výraz == bit 0, nenulový výraz == bit 1)
-    //    Př: bitset_setbit(p,20,1);
-
-// #define bitset_getbit(array, index) (1 & array[(index/32)] >> (index % 32))
-    //  bitset_getbit(jmeno_pole,index)
-    //    získá hodnotu zadaného bitu, vrací hodnotu 0 nebo 1
-    //    Př: if(bitset_getbit(p,i)==1) printf("1");
-    //        if(!bitset_getbit(p,i))   printf("0");
-
-
-// void bitset_alloc(bitset_t array, int size) {
-//     array = calloc(size, sizeof(bitset_t));
-    
-// }
-
-void bitset_free(bitset_t array) {
-    free(array);
-}
-
-unsigned long bitset_size(bitset_t array) {
-    return array[0];
-}
-
+/**
+ * @brief Macro for setting a bit in the bitset.
+ * @param array Name of the bitset.
+ * @param index Index of the array.
+ * @param value Bit value. True value -> 1, False value -> 0. 
+ */
 #define bitset_setbit(array, index, value)  \
     array[index / (sizeof(bitset_index_t) * __CHAR_BIT__) + 1] = \
         (bitset_index_t) array[index / (sizeof(bitset_index_t) * __CHAR_BIT__) + 1] \
         & (value ? ~0 : (bitset_index_t) ~(1 << (index % ((sizeof(bitset_index_t) * __CHAR_BIT__))))) \
         | (value ? (bitset_index_t) 1 << (index % (sizeof(bitset_index_t) * __CHAR_BIT__)) : 0)
+
+/**
+ * @brief Macro for getting a bit value in the bitset.
+ * @param array Name of the bitset.
+ * @param index Index of the array.
+ */
+#define bitset_getbit(array, index) \
+    ((bitset_index_t) array[(index / (sizeof(bitset_index_t) * __CHAR_BIT__)) + 1] \
+    & ((bitset_index_t) 1 << (index % (sizeof(bitset_index_t) * __CHAR_BIT__)))) ? 1 : 0    
+
+
 
 // void bitset_setbit(bitset_t array, bitset_index_t index, unsigned int value) {
 //     array[index / (sizeof(bitset_index_t) * __CHAR_BIT__) + 1] =
@@ -105,11 +80,6 @@ unsigned long bitset_size(bitset_t array) {
 //         array[i] &= ~flag;
 //     }
 // }
-
-#define bitset_getbit(array, index) \
-    ((bitset_index_t) array[(index / (sizeof(bitset_index_t) * __CHAR_BIT__)) + 1] \
-    & ((bitset_index_t) 1 << (index % (sizeof(bitset_index_t) * __CHAR_BIT__)))) ? 1 : 0    
-
 
 // unsigned bitset_getbit(bitset_t array, bitset_index_t index) {
 //     return (array[index / (sizeof(bitset_index_t) * __CHAR_BIT__) + 1] 

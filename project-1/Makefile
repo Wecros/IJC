@@ -10,6 +10,12 @@ run:
 	gcc ${FLAGS} ${NAME}
 	./a.out
 
+primes:
+	gcc ${FLAGS} primes.c
+
+primes-i:
+	gcc ${FLAGS} primes.c
+
 eratosthenes:
 	gcc ${FLAGS} eratosthenes.c -lm
 

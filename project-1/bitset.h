@@ -6,14 +6,18 @@
 typedef unsigned long bitset_index_t;
 typedef bitset_index_t * bitset_t; 
 
-#define BITSIZE (sizeof(bitset_index_t) * __CHAR_BIT__)
+#define BITSIZE (bitset_index_t) (sizeof(bitset_index_t) * __CHAR_BIT__)
+
+// TODO: check the array's bounds
 
 /**
  * @brief Macro for creating bitset array.
  * @param array Name of the bitset.
  * @param size Size of the array in bits.
  */
-#define bitset_create(array, size)  bitset_t array[size / (sizeof(bitset_index_t) * __CHAR_BIT__) \
+#define bitset_create(array, size)  \
+    static_assert(size > 0, "Size of the bitset must be greater than 0"); \
+    bitset_t array[size / (sizeof(bitset_index_t) * __CHAR_BIT__) \
     + ((size % (sizeof(bitset_index_t) * __CHAR_BIT__)) ? 2 : 1)] = {size}
 
 /**
@@ -23,6 +27,9 @@ typedef bitset_index_t * bitset_t;
  */
 #define bitset_alloc(array, size) \
     bitset_t array = calloc(size, sizeof(bitset_index_t))
+
+// #define USE_INLINE
+#ifndef USE_INLINE
 
 /**
  * @brief Macro for freeing a dynamic bitset array.
@@ -52,27 +59,35 @@ typedef bitset_index_t * bitset_t;
  * @brief Macro for getting a bit value in the bitset.
  * @param array Name of the bitset.
  * @param index Index of the array.
+ * @return Either 0 or 1.
  */
 #define bitset_getbit(array, index) \
     ((bitset_index_t) array[(index / (sizeof(bitset_index_t) * __CHAR_BIT__)) + 1] \
     & ((bitset_index_t) 1 << (index % (sizeof(bitset_index_t) * __CHAR_BIT__)))) ? 1 : 0    
 
+#else
 
+extern inline void bitset_free(bitset_t array) {
+    free(array);
+} 
 
-// void bitset_setbit(bitset_t array, bitset_index_t index, unsigned int value) {
-//     array[index / (sizeof(bitset_index_t) * __CHAR_BIT__) + 1] =
-//         array[index / (sizeof(bitset_index_t) * __CHAR_BIT__) + 1]
-//         & (value ? ~0 : ~(1 << (index % ((sizeof(bitset_index_t) * __CHAR_BIT__)))))
-//         | (value ? 1 << (index % (sizeof(bitset_index_t) * __CHAR_BIT__)) : 0)
-//     ;
-// }
+extern inline unsigned bitset_size(bitset_t array) {
+    return array[0];
+}
 
-// void bitset_setbit(bitset_t array, bitset_index_t index, unsign  ed int value) {
+extern inline void bitset_setbit(bitset_t array, bitset_index_t index, unsigned value) {
+    array[index / (sizeof(bitset_index_t) * __CHAR_BIT__) + 1] =
+        (bitset_index_t) array[index / (sizeof(bitset_index_t) * __CHAR_BIT__) + 1]
+        & (value ? ~0 : (bitset_index_t) ~(1 << (index % ((sizeof(bitset_index_t) * __CHAR_BIT__)))))
+        | (value ? (bitset_index_t) 1 << (index % (sizeof(bitset_index_t) * __CHAR_BIT__)) : 0);
+}
+
+// extern inline void bitset_setbit(bitset_t array, bitset_index_t index, unsigned value) {
 //     unsigned bitsize = sizeof(bitset_index_t) * __CHAR_BIT__;
 
 //     int i = (index / bitsize) + 1;
 //     int pos = index % bitsize;
-//     unsigned flag = 1 << pos;
+//     unsigned flag = (bitset_index_t) 1 << pos;
 
 //     if (value) {
 //         array[i] |= flag;
@@ -81,12 +96,12 @@ typedef bitset_index_t * bitset_t;
 //     }
 // }
 
-// unsigned bitset_getbit(bitset_t array, bitset_index_t index) {
-//     return (array[index / (sizeof(bitset_index_t) * __CHAR_BIT__) + 1] 
-//         & (1 << (index % (sizeof(bitset_index_t) * __CHAR_BIT__)))) ? 1 : 0
-//     ;
+extern inline unsigned bitset_getbit(bitset_t array, bitset_index_t index) {
+    return ((bitset_index_t) array[(index / (sizeof(bitset_index_t) * __CHAR_BIT__)) + 1]
+    & ((bitset_index_t) 1 << (index % (sizeof(bitset_index_t) * __CHAR_BIT__)))) ? 1 : 0;
+}
 
-
+// extern inline unsigned bitset_getbit(bitset_t array, bitset_index_t index) {
 //     unsigned bitsize = sizeof(bitset_index_t) * __CHAR_BIT__;
 
 //     int i = (index / bitsize) + 1;
@@ -94,8 +109,7 @@ typedef bitset_index_t * bitset_t;
 //     int arrval = array[i];
 
 //     // unsigned long flag = 1 << pos;  // TOFIX: WHY DOESNT THIS WORK?
-//     unsigned long flag = 1;
-//     flag = flag << pos;
+//     unsigned long flag = (bitset_index_t) 1 << pos;
 
 //     // printf("idx: %lu, pos: %lu, flag: %lu, arr: %lu, BIT: %lu\n", i, pos, flag, arrval, arrval & flag);
     
@@ -103,19 +117,5 @@ typedef bitset_index_t * bitset_t;
 //     return bit;
 // }
 
-// unsigned bitset_getbit(bitset_t array, bitset_index_t index) {
-//     unsigned bitsize = sizeof(bitset_index_t) * __CHAR_BIT__;
 
-//     int i = (index / bitsize) + 1;
-//     int pos = index % bitsize;
-//     int arrval = array[i];
-
-//     // unsigned long flag = 1 << pos;  // TOFIX: WHY DOESNT THIS WORK?
-//     unsigned long flag = 1;
-//     flag = flag << pos;
-
-//     // printf("idx: %lu, pos: %lu, flag: %lu, arr: %lu, BIT: %lu\n", i, pos, flag, arrval, arrval & flag);
-    
-//     int bit = arrval & flag ? 1 : 0;
-//     return bit;
-// }
+#endif

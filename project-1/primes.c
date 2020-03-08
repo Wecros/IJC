@@ -13,51 +13,47 @@
 // extern bitset_setbit;
 // extern bitset_getbit;
 
-void test() {
-    bitset_create(bitarr, SIZE);
-    // bitset_alloc(bitarr, SIZE);
+void test(bitset_t array) {
+    // const size_t array_len = sizeof(array) / sizeof(array[0]);
+    const size_t array_len = 3;
+    printf("array len: %lu\n", array_len);
 
-    const size_t bitarr_len = sizeof(bitarr) / sizeof(bitarr[0]);
-    printf("bitarr len: %lu\n", bitarr_len);
-    // static_assert(bitarr_len == 3, "bitarr is not right");
-
-    for (size_t i = 0; i < bitarr_len; i++) {
-        printf("arr[%lu]: %lu\n", i, (bitset_index_t) bitarr[i]);
+    for (size_t i = 0; i < array_len; i++) {
+        printf("arr[%lu]: %lu\n", i, (bitset_index_t) array[i]);
     }
 
     for (bitset_index_t i = 0; i < 32; i++) {
-        bitset_setbit(bitarr, i, 1);
+        bitset_setbit(array, i, 1);
     }
 
-    // for (bitset_index_t i = 64; i < 96; i++) {
-    //     bitset_setbit(bitarr, i, 1);
-    // }
+    for (bitset_index_t i = 73; i < 94; i++) {
+        bitset_setbit(array, i, 1);
+    }
 
-    bitset_setbit(bitarr, 87, 1);
-    bitset_setbit(bitarr, 87, 0);
-    bitset_setbit(bitarr, 86, 1); 
-    bitset_setbit(bitarr, 88, 1);
+
+    bitset_setbit(array, 87, 1);
+    bitset_setbit(array, 87, 0);
+    bitset_setbit(array, 86, 1); 
+    bitset_setbit(array, 88, 1);
 
  
     for (bitset_index_t i = 0; i < 100; i++) {
-        printf("val [%lu]: %u\n", i, bitset_getbit(bitarr, i));
+        printf("val [%lu]: %u\n", i, bitset_getbit(array, i));
     }
 
-    for (size_t i = 1; i < bitarr_len; i++) {
-        printf("ultimate val: %lu\n", (bitset_index_t) bitarr[i]);
+    for (size_t i = 1; i < array_len; i++) {
+        printf("ultimate val: %lu\n", (bitset_index_t) array[i]);
     }
-    printf("bitsize: %lu\n", (bitset_index_t) bitset_size(bitarr));
-    printf("\n");
-    // bitset_free(bitarr);
+    printf("bitsize: %lu\n", (bitset_index_t) bitset_size(array));
 }
 
 int main() {
     const size_t start = clock();  // program's time start value
+    // bitset_alloc(bitarr, SMALL_SIEVE);
+    bitset_create(bitarr, SMALL_SIEVE);
 
-    // test();
+    // test(bitarr);
 
-    // bitset_create(bitarr, SMALL_SIEVE);
-    bitset_create(bitarr, BIG_SIEVE);
     sieve(bitarr);
 
     fprintf(stderr, "Time=%.3g\n", (double)(clock()-start)/CLOCKS_PER_SEC);

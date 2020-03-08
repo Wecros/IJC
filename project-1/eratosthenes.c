@@ -4,6 +4,7 @@
 
 /**
  * @brief Algorithm for getting prime numbers 
+ * @param array Bitset array. 
  */
 void sieve(bitset_t array) {
     bitset_setbit(array, 0, 1);
@@ -20,7 +21,7 @@ void sieve(bitset_t array) {
         }
     }
 
-    for (size_t i = bitset_size(array) - 1, n = 5; (i > 0) && n; i--) {
+    for (size_t i = bitset_size(array) - 1,  n = 5; (i > 0) && n; i--) {
         if (!bitset_getbit(array, i)) {
             printf("%lu\n", i);
             n--;

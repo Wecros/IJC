@@ -10,6 +10,7 @@ typedef bitset_index_t * bitset_t;
 #define BITSIZE (bitset_index_t) (sizeof(bitset_index_t) * CHAR_BIT)
 
 // TODO: check the array's bounds
+// TODO: Makefile finishing
 
 /**
  * @brief Macro for creating bitset array.
@@ -27,7 +28,9 @@ typedef bitset_index_t * bitset_t;
  * @param size Size of the array in bits.
  */
 #define bitset_alloc(array, size) \
-    bitset_index_t array = calloc(size, sizeof(bitset_index_t))
+    static_assert(size > 0, "Size of the bitset must be greater than 0"); \
+    bitset_t array = calloc(size, sizeof(bitset_index_t)); \
+    array[0] = size;
 
 // #define USE_INLINE
 #ifndef USE_INLINE

@@ -1,21 +1,19 @@
 PRIMES=primes.c
 NAME=${PRIMES}
-FLAGS=-g -std=c11 -pedantic -Wall -Wextra -lm
+FLAGS=-g -std=c11 -pedantic -Wall -Wextra -lm -O2
 LC_ALL=cs_CZ.utf8
 
 all:
 	gcc -o build/primes ${FLAGS} primes.c 
-	# gcc -o build/primes-i ${FLAGS} -DUSE_INLINE primes.c 
+	gcc -o build/primes-i ${FLAGS} -DUSE_INLINE primes.c 
 
 run:
-	gcc ${FLAGS} ${NAME}
-	./a.out
+	gcc -o build/primes ${FLAGS} primes.c 
+	gcc -o build/primes-i ${FLAGS} -DUSE_INLINE primes.c 
+	./build/primes && echo && ./build/primes-i
 
-primes:
-	gcc ${FLAGS} primes.c -lm
-
-primes-i:
-	gcc ${FLAGS} primes.c -lm -DUSE_INLINE
+clean:
+	rm a.out build/*
 
 x32:
 	gcc ${FLAGS} -m32 ${NAME}

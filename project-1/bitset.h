@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
 #define N 100
 
 typedef unsigned long bitset_index_t;
 typedef bitset_index_t * bitset_t; 
 
-#define BITSIZE (bitset_index_t) (sizeof(bitset_index_t) * __CHAR_BIT__)
+#define BITSIZE (bitset_index_t) (sizeof(bitset_index_t) * CHAR_BIT)
 
 // TODO: check the array's bounds
 
@@ -17,8 +18,8 @@ typedef bitset_index_t * bitset_t;
  */
 #define bitset_create(array, size)  \
     static_assert(size > 0, "Size of the bitset must be greater than 0"); \
-    bitset_t array[size / (sizeof(bitset_index_t) * __CHAR_BIT__) \
-    + ((size % (sizeof(bitset_index_t) * __CHAR_BIT__)) ? 2 : 1)] = {size}
+    bitset_index_t array[size / BITSIZE \
+    + ((size % BITSIZE) ? 2 : 1)] = {size}
 
 /**
  * @brief Macro for creating a dynamic bitset array.
@@ -26,7 +27,7 @@ typedef bitset_index_t * bitset_t;
  * @param size Size of the array in bits.
  */
 #define bitset_alloc(array, size) \
-    bitset_t array = calloc(size, sizeof(bitset_index_t))
+    bitset_index_t array = calloc(size, sizeof(bitset_index_t))
 
 // #define USE_INLINE
 #ifndef USE_INLINE
@@ -50,10 +51,10 @@ typedef bitset_index_t * bitset_t;
  * @param value Bit value. True value -> 1, False value -> 0. 
  */
 #define bitset_setbit(array, index, value)  \
-    array[index / (sizeof(bitset_index_t) * __CHAR_BIT__) + 1] = \
-        (bitset_index_t) array[index / (sizeof(bitset_index_t) * __CHAR_BIT__) + 1] \
-        & (value ? ~0 : (bitset_index_t) ~(1 << (index % ((sizeof(bitset_index_t) * __CHAR_BIT__))))) \
-        | (value ? (bitset_index_t) 1 << (index % (sizeof(bitset_index_t) * __CHAR_BIT__)) : 0)
+    array[index / BITSIZE + 1] = \
+        (bitset_index_t) (array[index / BITSIZE + 1] \
+        & (value ? (bitset_index_t)  ~0 : (bitset_index_t) ~(1 << (index % (BITSIZE))))) \
+        | (value ? (bitset_index_t) 1 << (index % BITSIZE) : 0)
 
 /**
  * @brief Macro for getting a bit value in the bitset.
@@ -62,8 +63,8 @@ typedef bitset_index_t * bitset_t;
  * @return Either 0 or 1.
  */
 #define bitset_getbit(array, index) \
-    ((bitset_index_t) array[(index / (sizeof(bitset_index_t) * __CHAR_BIT__)) + 1] \
-    & ((bitset_index_t) 1 << (index % (sizeof(bitset_index_t) * __CHAR_BIT__)))) ? 1 : 0    
+    ((bitset_index_t) array[(index / BITSIZE) + 1] \
+    & ((bitset_index_t) 1 << (index % BITSIZE))) ? 1 : 0    
 
 #else
 
@@ -76,14 +77,14 @@ extern inline unsigned bitset_size(bitset_t array) {
 }
 
 extern inline void bitset_setbit(bitset_t array, bitset_index_t index, unsigned value) {
-    array[index / (sizeof(bitset_index_t) * __CHAR_BIT__) + 1] =
-        (bitset_index_t) array[index / (sizeof(bitset_index_t) * __CHAR_BIT__) + 1]
-        & (value ? ~0 : (bitset_index_t) ~(1 << (index % ((sizeof(bitset_index_t) * __CHAR_BIT__)))))
-        | (value ? (bitset_index_t) 1 << (index % (sizeof(bitset_index_t) * __CHAR_BIT__)) : 0);
+    array[index / BITSIZE + 1] =
+        (bitset_index_t) (array[index / BITSIZE + 1]
+        & (value ? (bitset_index_t) ~0 : (bitset_index_t) ~(1 << (index % (BITSIZE)))))
+        | (value ? (bitset_index_t) 1 << (index % BITSIZE) : 0);
 }
 
 // extern inline void bitset_setbit(bitset_t array, bitset_index_t index, unsigned value) {
-//     unsigned bitsize = sizeof(bitset_index_t) * __CHAR_BIT__;
+//     unsigned bitsize = sizeof(bitset_index_t) * CHAR_BIT;
 
 //     int i = (index / bitsize) + 1;
 //     int pos = index % bitsize;
@@ -97,12 +98,12 @@ extern inline void bitset_setbit(bitset_t array, bitset_index_t index, unsigned 
 // }
 
 extern inline unsigned bitset_getbit(bitset_t array, bitset_index_t index) {
-    return ((bitset_index_t) array[(index / (sizeof(bitset_index_t) * __CHAR_BIT__)) + 1]
-    & ((bitset_index_t) 1 << (index % (sizeof(bitset_index_t) * __CHAR_BIT__)))) ? 1 : 0;
+    return ((bitset_index_t) array[(index / BITSIZE) + 1]
+    & ((bitset_index_t) 1 << (index % BITSIZE))) ? 1 : 0;
 }
 
 // extern inline unsigned bitset_getbit(bitset_t array, bitset_index_t index) {
-//     unsigned bitsize = sizeof(bitset_index_t) * __CHAR_BIT__;
+//     unsigned bitsize = sizeof(bitset_index_t) * CHAR_BIT;
 
 //     int i = (index / bitsize) + 1;
 //     int pos = index % bitsize;

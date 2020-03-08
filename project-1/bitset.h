@@ -69,6 +69,14 @@ typedef bitset_index_t * bitset_t;
     ((bitset_index_t) array[(index / BITSIZE) + 1] \
     & ((bitset_index_t) 1 << (index % BITSIZE))) ? 1 : 0    
 
+/* #define bitset_getbit(array, index) \
+    (index < (bitset_size(array)) && index > 0) ? ( \
+    ((bitset_index_t) array[(index / BITSIZE) + 1] \
+    & ((bitset_index_t) 1 << (index % BITSIZE))) ? 1 : 0) \
+        : error_exit("bitset_getbit: Index %lu mimo rozsah 0..%lu\n", \
+            (unsigned long) index, (unsigned long) bitset_size(array))
+*/
+
 #else
 
 extern inline void bitset_free(bitset_t array) {

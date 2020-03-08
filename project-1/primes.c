@@ -3,6 +3,7 @@
 
 #include "bitset.h"
 #include "eratosthenes.c"
+#include "error.h"
 
 #define SIZE 100  // TODO: '-100' - compile error
 #define SMALL_SIEVE 100
@@ -57,5 +58,8 @@ int main() {
     sieve(bitarr);
 
     fprintf(stderr, "Time=%.3g\n", (double)(clock()-start)/CLOCKS_PER_SEC);
+
+    // error_exit("bitset_getbit: Index %lu mimo rozsah 0..%lu\n", (unsigned long) 10, (unsigned long) 9);
+    
     return 0;
 }

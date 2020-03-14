@@ -1,25 +1,81 @@
+CC=gcc
 PRIMES=primes.c
 NAME=${PRIMES}
 FLAGS=-g -std=c11 -pedantic -Wall -Wextra -lm -O2
+LINKER=-lm
 LC_ALL=cs_CZ.utf8
 
-all:
-	gcc -o build/primes ${FLAGS} primes.c 
-	gcc -o build/primes-i ${FLAGS} -DUSE_INLINE primes.c 
+EXEC = primes
+OBJS = primes.o primes-i.o
 
-run:
-	gcc -o build/primes ${FLAGS} primes.c 
-	gcc -o build/primes-i ${FLAGS} -DUSE_INLINE primes.c 
+# OBJS	= error.o ppm.o steg-decode.o ertosthenes.o primes.o
+# SOURCE	= error.c ppm.c steg-decode.c ertosthenes.c primes.c
+# HEADER	= bitset.h error.h ppm.h
+
+# TODO: new makefiled
+
+# http://ivs.fit.vutbr.cz/IVS2019-20_06-make.pdf
+
+all: 
+	${CC} -o build/primes ${FLAGS} primes.c 
+	${CC} -o build/primes-i ${FLAGS} -DUSE_INLINE primes.c 
+
+# all: primes.o
+	# ${CC} -o build/primes primes.o ${LINKER}
+	# ${CC} -o build/primes-i primes-i.o ${LINKER}
+	# ${CC} -o build/primes primes-i.o
+
+primes.o: primes.c
+	${CC} ${FLAGS} -c primes.c
+	${CC} ${FLAGS} -DUSE_INLINE -c primes.c
+
+primes-i.o: primes.c
+	${CC} ${FLAGS} -DUSE_INLINE -c primes.c
+
+run: all
 	./build/primes && echo && ./build/primes-i 
 
 primes:
-	gcc -o build/primes ${FLAGS} primes.c 
+	${CC} -o build/primes ${FLAGS} primes.c 
 
 primes-i:
-	gcc -o build/primes-i ${FLAGS} -DUSE_INLINE primes.c 
+	${CC} -o build/primes-i ${FLAGS} -DUSE_INLINE primes.c 
 
 clean:
 	rm a.out build/*
 
 x32:
-	gcc ${FLAGS} -m32 ${NAME}
+	${CC} ${FLAGS} -m32 ${NAME}
+
+# OBJS	= error.o ppm.o steg-decode.o ertosthenes.o primes.o
+# SOURCE	= error.c ppm.c steg-decode.c ertosthenes.c primes.c
+# HEADER	= bitset.h error.h ppm.h
+# OUT	= primes.out
+# CC	 = gcc
+# FLAGS	 = -g -c -Wall
+# LFLAGS	 = -lm
+
+# all: $(OBJS)
+# 	$(CC) -g $(OBJS) -o $(OUT) $(LFLAGS)
+
+# error.o: error.c
+# 	$(CC) $(FLAGS) error.c 
+
+# ppm.o: ppm.c
+# 	$(CC) $(FLAGS) ppm.c 
+
+# steg-decode.o: steg-decode.c
+# 	$(CC) $(FLAGS) steg-decode.c 
+
+# ertosthenes.o: ertosthenes.c
+# 	$(CC) $(FLAGS) ertosthenes.c 
+
+# primes.o: primes.c
+# 	$(CC) $(FLAGS) primes.c 
+
+
+# clean:
+# 	rm -f $(OBJS) $(OUT)
+
+# run: $(OUT)
+# 	./$(OUT)

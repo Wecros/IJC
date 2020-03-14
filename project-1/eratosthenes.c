@@ -21,7 +21,7 @@ void sieve(bitset_t array) {
         }
     }
 
-    for (size_t i = bitset_size(array) - 1,  n = 5; (i > 0) && n; i--) {
+    for (size_t i = bitset_size(array) - 1,  n = 10; (i > 0) && n; i--) {
         if (!bitset_getbit(array, i)) {
             printf("%lu\n", i);
             n--;

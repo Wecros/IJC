@@ -4,23 +4,22 @@
 #include "error.h"
 
 void warning_msg(const char* fmt, ...) {
-    va_list args;
-    va_start(args, fmt);
+    va_list ap;
+    va_start(ap, fmt);
 
-    fputs("WARNING: ", stderr);
-    vfprintf(stderr, fmt, args);
+    fputs("CHYBA: ", stderr);
+    vfprintf(stderr, fmt, ap);
 
-    va_end(args);
-    exit(EXIT_FAILURE);
+    va_end(ap);
 }
 
 void error_exit(const char* fmt, ...) {
-    va_list args;
-    va_start(args, fmt);
+    va_list ap;
+    va_start(ap, fmt);
 
-    fputs("ERROR: ", stderr);
-    vfprintf(stderr, fmt, args);
+    fputs("CHYBA: ", stderr);
+    vfprintf(stderr, fmt, ap);
 
-    va_end(args);
+    va_end(ap);
     exit(EXIT_FAILURE);
 }

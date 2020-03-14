@@ -51,7 +51,7 @@ void test(bitset_t array) {
 int main() {
     const size_t start = clock();  // program's time start value
     // bitset_alloc(bitarr, SMALL_SIEVE);
-    bitset_create(bitarr, SMALL_SIEVE);
+    bitset_create(bitarr, BIG_SIEVE);
 
     // test(bitarr);
 

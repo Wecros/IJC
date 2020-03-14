@@ -19,8 +19,7 @@ typedef bitset_index_t * bitset_t;
  */
 #define bitset_create(array, size)  \
     static_assert(size > 0, "Size of the bitset must be greater than 0"); \
-    bitset_index_t array[size / BITSIZE \
-    + ((size % BITSIZE) ? 2 : 1)] = {size}
+    bitset_index_t array[size / BITSIZE + ((size % BITSIZE) ? 2 : 1)] = {size}
 
 /**
  * @brief Macro for creating a dynamic bitset array.

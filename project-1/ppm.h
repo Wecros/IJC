@@ -1,3 +1,5 @@
+#include "bitset.h"
+
 struct ppm {
     unsigned xsize;
     unsigned ysize;

@@ -1,4 +1,6 @@
+#include <stdio.h>
 #include <math.h>
+
 #include "eratosthenes.h"
 
 void sieve(bitset_t array) {

@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
 #include <assert.h>
@@ -11,7 +10,6 @@ typedef bitset_index_t * bitset_t;
 #define BITSIZE (bitset_index_t) (sizeof(bitset_index_t) * CHAR_BIT)
 
 // TODO: check the array's bounds
-// TODO: Makefile finishing
 
 /**
  * @brief Macro for creating bitset array.

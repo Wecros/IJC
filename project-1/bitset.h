@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
+#include <assert.h>
 
 #define N 100
 
@@ -78,22 +79,22 @@ typedef bitset_index_t * bitset_t;
 
 #else
 
-extern inline void bitset_free(bitset_t array) {
+inline void bitset_free(bitset_t array) {
     free(array);
 } 
 
-extern inline unsigned bitset_size(bitset_t array) {
+inline unsigned bitset_size(bitset_t array) {
     return array[0];
 }
 
-extern inline void bitset_setbit(bitset_t array, bitset_index_t index, unsigned value) {
+inline void bitset_setbit(bitset_t array, bitset_index_t index, unsigned value) {
     array[index / BITSIZE + 1] =
         (bitset_index_t) (array[index / BITSIZE + 1]
         & (value ? (bitset_index_t) ~0 : (bitset_index_t) ~(1 << (index % (BITSIZE)))))
         | (value ? (bitset_index_t) 1 << (index % BITSIZE) : 0);
 }
 
-// extern inline void bitset_setbit(bitset_t array, bitset_index_t index, unsigned value) {
+// inline void bitset_setbit(bitset_t array, bitset_index_t index, unsigned value) {
 //     unsigned bitsize = sizeof(bitset_index_t) * CHAR_BIT;
 
 //     int i = (index / bitsize) + 1;
@@ -107,12 +108,12 @@ extern inline void bitset_setbit(bitset_t array, bitset_index_t index, unsigned 
 //     }
 // }
 
-extern inline unsigned bitset_getbit(bitset_t array, bitset_index_t index) {
+inline unsigned bitset_getbit(bitset_t array, bitset_index_t index) {
     return ((bitset_index_t) array[(index / BITSIZE) + 1]
     & ((bitset_index_t) 1 << (index % BITSIZE))) ? 1 : 0;
 }
 
-// extern inline unsigned bitset_getbit(bitset_t array, bitset_index_t index) {
+// inline unsigned bitset_getbit(bitset_t array, bitset_index_t index) {
 //     unsigned bitsize = sizeof(bitset_index_t) * CHAR_BIT;
 
 //     int i = (index / bitsize) + 1;

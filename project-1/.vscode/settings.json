@@ -1,7 +1,0 @@
-{
-    "files.associations": {
-        "array": "cpp",
-        "stdio.h": "c",
-        "math.h": "c"
-    }
-}

@@ -1,18 +1,23 @@
 #include <stdio.h>
 #include <time.h>
 
+#include <limits.h>
+#include <math.h>
+
 #include "bitset.h"
-#include "eratosthenes.c"
+#include "eratosthenes.h"
 #include "error.h"
 
 #define SIZE 100  // TODO: '-100' - compile error
 #define SMALL_SIEVE 100
 #define BIG_SIEVE 500000000
 
-// extern bitset_free;
-// extern bitset_size;
-// extern bitset_setbit;
-// extern bitset_getbit;
+#ifdef USE_INLINE
+extern bitset_free;
+extern bitset_size;
+extern bitset_setbit;
+extern bitset_getbit; 
+#endif
 
 void test(bitset_t array) {
     // const size_t array_len = sizeof(array) / sizeof(array[0]);
@@ -30,7 +35,6 @@ void test(bitset_t array) {
     for (bitset_index_t i = 73; i < 94; i++) {
         bitset_setbit(array, i, 1);
     }
-
 
     bitset_setbit(array, 87, 1);
     bitset_setbit(array, 87, 0);
@@ -51,7 +55,7 @@ void test(bitset_t array) {
 int main() {
     const size_t start = clock();  // program's time start value
     // bitset_alloc(bitarr, SMALL_SIEVE);
-    bitset_create(bitarr, BIG_SIEVE);
+    bitset_create(bitarr, SMALL_SIEVE); 
 
     // test(bitarr);
 

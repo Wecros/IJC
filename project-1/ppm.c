@@ -1,5 +1,5 @@
 #include "ppm.h"
-#include "eratosthenes.c"
+#include "eratosthenes.h"
 
 struct ppm * ppm_read(const char * filename) {
     

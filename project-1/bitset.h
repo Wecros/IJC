@@ -6,7 +6,7 @@
 #define N 100
 
 typedef unsigned long bitset_index_t;
-typedef bitset_index_t * bitset_t; 
+typedef bitset_index_t * bitset_t;
 
 #define BITSIZE (bitset_index_t) (sizeof(bitset_index_t) * CHAR_BIT)
 

@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "ppm.c"
+#include "ppm.h"
 
 int main(int argc, char *argv[]) {
     

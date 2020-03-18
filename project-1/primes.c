@@ -31,8 +31,8 @@ void printPrimes(bitset_t primes) {
 
 int main() {
     const size_t start = clock();  // program's time start value
-    // bitset_alloc(bitarr, SMALL_SIEVE);
-    bitset_create(bitarr, BIG_SIEVE); 
+    bitset_alloc(bitarr, BIG_SIEVE);
+    // bitset_create(bitarr, BIG_SIEVE); 
 
     sieve(bitarr);
     printPrimes(bitarr);

@@ -17,8 +17,10 @@ typedef bitset_index_t * bitset_t;
  * @param size Size of the array in bits.
  */
 #define bitset_create(array, size)  \
-    static_assert(size > 0, "Size of the bitset must be greater than 0"); \
     bitset_index_t array[size / BITSIZE + ((size % BITSIZE) ? 2 : 1)] = {size}
+    
+    // static_assert(size > 0, "Size of the bitset must be greater than 0"); 
+    // bitset_index_t array[size / BITSIZE + ((size % BITSIZE) ? 2 : 1)] = {size}
 
 /**
  * @brief Macro for creating a dynamic bitset array.
@@ -26,9 +28,13 @@ typedef bitset_index_t * bitset_t;
  * @param size Size of the array in bits.
  */
 #define bitset_alloc(array, size) \
-    static_assert(size > 0, "Size of the bitset must be greater than 0"); \
-    bitset_t array = calloc(size, sizeof(bitset_index_t)); \
+    bitset_t array = calloc(size / BITSIZE + ((size % BITSIZE) ? 2 : 1), sizeof(bitset_index_t)); \
     array[0] = size;
+
+    // static_assert(size > 0, "Size of the bitset must be greater than 0"); 
+    // bitset_t array = calloc(size, sizeof(bitset_index_t)); 
+    // array[0] = size;
+
 
 // #define USE_INLINE
 #ifndef USE_INLINE

@@ -1,7 +1,7 @@
 CC=gcc
 PRIMES=primes.c
 NAME=${PRIMES}
-CFLAGS=-g -std=c11 -pedantic -Wextra -O2
+CFLAGS=-g -std=c11 -pedantic -Wall -Wextra -O2
 LDFLAGS=-lm
 LC_ALL=cs_CZ.utf8
 

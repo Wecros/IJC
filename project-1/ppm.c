@@ -1,10 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include "ppm.h"
 #include "error.h" 
-#include "ctype.h"
 
 // TODO: Marty - close file, free line
 
@@ -16,9 +14,9 @@ struct ppm * ppm_read(const char * filename) {
 
     char format[2];
     unsigned xsize, ysize; 
-    unsigned color; 
+    unsigned char color; 
 
-    fscanf(file, "%s \n%u %u \n%u\n", format, &xsize, &ysize, &color);
+    fscanf(file, "%s %u %u %hhu\n", format, &xsize, &ysize, &color);
 
     struct ppm *ppm = malloc(sizeof(struct ppm) + sizeof(char) * xsize * ysize * 3); 
     ppm->xsize = xsize;

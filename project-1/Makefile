@@ -29,8 +29,12 @@ primes-i: ${PRIMES_OBJS}
 
 steg-decode: ${DECODE_OBJS}
 	${CC} ${CFLAGS} -o $@ $^ ${LDFLAGS}
+steg-decode-i: CFLAGS += -DUSE_INLINE
+steg-decode-i: ${DECODE_OBJS}
+	${CC} ${CFLAGS} -o $@ $^ ${LDFLAGS}
 
-%.o: %.c
+
+%.o: %.c %.h
 	${CC} ${CFLAGS} -c $^
 
 

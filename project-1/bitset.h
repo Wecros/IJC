@@ -10,8 +10,8 @@ typedef bitset_index_t * bitset_t;
 #define BITSIZE (bitset_index_t) (sizeof(bitset_index_t) * CHAR_BIT)
 
 // TODO: check the array's bounds
-
-/**
+ 
+/**  
  * @brief Macro for creating bitset array.
  * @param array Name of the bitset.
  * @param size Size of the array in bits.
@@ -70,8 +70,8 @@ typedef bitset_index_t * bitset_t;
  * @return Either 0 or 1.
  */
 #define bitset_getbit(array, index) \
-    ((bitset_index_t) array[(index / BITSIZE) + 1] \
-    & ((bitset_index_t) 1 << (index % BITSIZE))) ? 1 : 0    
+    (((bitset_index_t) array[(index / BITSIZE) + 1] \
+    & ((bitset_index_t) 1 << (index % BITSIZE))) ? 1 : 0) 
 
 /* #define bitset_getbit(array, index) \
     (index < (bitset_size(array)) && index > 0) ? ( \

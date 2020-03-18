@@ -9,15 +9,9 @@
 #define SMALL_SIEVE 100
 #define BIG_SIEVE 500000000
 
-#ifdef USE_INLINE 
-extern bitset_free; 
-extern bitset_size; 
-extern bitset_setbit;
-extern bitset_getbit; 
-#endif 
- 
+
 void printPrimes(bitset_t primes) {
-    int arr[10];
+    int arr[10]; 
     for (size_t i = bitset_size(primes) - 1,  n = 10; (i > 0) && n; i--) {
         if (!bitset_getbit(primes, i)) {
             arr[n-1] = i;
@@ -31,8 +25,8 @@ void printPrimes(bitset_t primes) {
 
 int main() {
     const size_t start = clock();  // program's time start value
-    bitset_alloc(bitarr, BIG_SIEVE);
-    // bitset_create(bitarr, BIG_SIEVE); 
+    // bitset_alloc(bitarr, BIG_SIEVE);
+    bitset_create(bitarr, BIG_SIEVE); 
 
     sieve(bitarr);
     printPrimes(bitarr);

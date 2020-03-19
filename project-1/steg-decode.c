@@ -10,6 +10,7 @@ int main(int argc, char *argv[]) {
     if (argc < 2 || argc > 2) {
         error_exit("Invalid arguments\n");
     }
+
     struct ppm *ppm = ppm_read(argv[1]);
     printf("xsize: %u\n", ppm->xsize);
     printf("ysize: %u\n", ppm->ysize);

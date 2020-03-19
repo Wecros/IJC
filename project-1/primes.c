@@ -5,9 +5,8 @@
 #include "eratosthenes.h"
 #include "error.h"
 
-#define SIZE 100  // TODO: '-100' - compile error
 #define SMALL_SIEVE 100
-#define BIG_SIEVE 500000000
+#define BIG_SIEVE 500000001
 
 
 void printPrimes(bitset_t primes) {
@@ -24,16 +23,14 @@ void printPrimes(bitset_t primes) {
 }
 
 int main() {
-    const size_t start = clock();  // program's time start value
-    // bitset_alloc(bitarr, BIG_SIEVE);
-    bitset_create(bitarr, BIG_SIEVE); 
+    const size_t start = clock();  // program's time start value 
+    bitset_alloc(bitarr, BIG_SIEVE);
+    // static bitset_create(bitarr, BIG_SIEVE); 
 
     sieve(bitarr);
     printPrimes(bitarr);
 
+    bitset_free(bitarr);
     fprintf(stderr, "Time=%.3g\n", (double)(clock()-start)/CLOCKS_PER_SEC);
-
-    // error_exit("bitset_getbit: Index %lu mimo rozsah 0..%lu\n", (unsigned long) 10, (unsigned long) 9);
-    
     return 0;
 }

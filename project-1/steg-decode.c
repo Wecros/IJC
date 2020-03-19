@@ -12,11 +12,11 @@ int main(int argc, char *argv[]) {
     }
 
     struct ppm *ppm = ppm_read(argv[1]);
-    printf("xsize: %u\n", ppm->xsize);
-    printf("ysize: %u\n", ppm->ysize);
+    if (ppm == NULL) {
+        error_exit("Obrázek nemohl být nahrán.\n");
+    }
     
     unsigned data_size = 3 * ppm->xsize * ppm->ysize;
-     
     bitset_alloc(primes, data_size);
     sieve(primes);
  
@@ -40,6 +40,7 @@ int main(int argc, char *argv[]) {
     }
     printf("\n");
 
+    bitset_free(primes);
     ppm_free(ppm);
     return 0;
 }

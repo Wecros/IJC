@@ -73,14 +73,14 @@ typedef bitset_index_t * bitset_t;
     : (((bitset_index_t) array[(index / BITSIZE) + 1] \
     & ((bitset_index_t) 1 << (index % BITSIZE))) ? 1 : 0))
  
-#else 
+#else
 
 inline void bitset_free(bitset_t array) {
     free(array);
-} 
+}
 
 inline unsigned bitset_size(bitset_t array) {
-    return array[0];
+    return array[0]; 
 }
 
 inline void bitset_setbit(bitset_t array, bitset_index_t index, unsigned value) {
@@ -94,10 +94,10 @@ inline void bitset_setbit(bitset_t array, bitset_index_t index, unsigned value) 
 }
 
 inline unsigned bitset_getbit(bitset_t array, bitset_index_t index) {
-    (index >= bitset_size(array) ? (error_exit("bitset_getbit: Index %lu mimo rozsah 0..%lu\n",
+    return index >= bitset_size(array) ? (error_exit("bitset_getbit: Index %lu mimo rozsah 0..%lu\n",
         (unsigned long) index, (unsigned long) bitset_size(array)), 0)
     : (((bitset_index_t) array[(index / BITSIZE) + 1]
-    & ((bitset_index_t) 1 << (index % BITSIZE))) ? 1 : 0))
+    & ((bitset_index_t) 1 << (index % BITSIZE))) ? 1 : 0);
 }
 
 #endif

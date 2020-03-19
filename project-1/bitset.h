@@ -1,3 +1,13 @@
+/**
+ * @file bitset.h
+ * @author Marek Filip (xfilip46), FIT BUT
+ * @date 19/Mar/2020
+ * @brief IJC-DU1, příklad a)
+ * @details Header file defining macros and inline functions for bitset array
+ *          implementation.
+ *          Compiled: gcc 9.2
+ */
+
 #include <stdlib.h>
 #include <limits.h>
 #include <assert.h>
@@ -9,9 +19,7 @@ typedef bitset_index_t * bitset_t;
 
 #define BITSIZE (bitset_index_t) (sizeof(bitset_index_t) * CHAR_BIT)
 
-// TODO: check the array's bounds
- 
-/**  
+/**
  * @brief Macro for creating bitset array.
  * @param array Name of the bitset.
  * @param size Size of the array in bits.
@@ -50,7 +58,7 @@ typedef bitset_index_t * bitset_t;
  * @brief Macro for setting a bit in the bitset.
  * @param array Name of the bitset.
  * @param index Index of the array.
- * @param value Bit value. True value -> 1, False value -> 0. 
+ * @param value Bit value. True value -> 1, False value -> 0.
  */
 #define bitset_setbit(array, index, value)  \
     if (index >= bitset_size(array)) { \
@@ -72,7 +80,7 @@ typedef bitset_index_t * bitset_t;
         (unsigned long) index, (unsigned long) bitset_size(array)), 0) \
     : (((bitset_index_t) array[(index / BITSIZE) + 1] \
     & ((bitset_index_t) 1 << (index % BITSIZE))) ? 1 : 0))
- 
+
 #else
 
 inline void bitset_free(bitset_t array) {
@@ -80,7 +88,7 @@ inline void bitset_free(bitset_t array) {
 }
 
 inline unsigned bitset_size(bitset_t array) {
-    return array[0]; 
+    return array[0];
 }
 
 inline void bitset_setbit(bitset_t array, bitset_index_t index, unsigned value) {

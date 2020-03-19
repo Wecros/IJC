@@ -1,3 +1,13 @@
+/**
+ * @file eratosthenes.c
+ * @author Marek Filip (xfilip46), FIT BUT
+ * @date 19/Mar/2020
+ * @brief IJC-DU1, příklad a)
+ * @details Eratosthenes sieve is an algorithm for computing prime numbers.
+ *          We use bitset array for the implementation.
+ *          Compiled: gcc 9.2
+ */
+
 #include <stdio.h>
 #include <math.h>
 

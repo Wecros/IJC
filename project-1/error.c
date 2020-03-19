@@ -1,7 +1,16 @@
+/**
+ * @file error.c
+ * @author Marek Filip (xfilip46), FIT BUT
+ * @date 19/Mar/2020
+ * @brief IJC-DU1, příklad b)
+ * @details Custom warning messages and exit functions.
+ *          Compiled: gcc 9.2
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
- 
+
 #include "error.h"
 
 void warning_msg(const char* fmt, ...) {

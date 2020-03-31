@@ -7,19 +7,19 @@
 #          Compiled: gcc 9.2
 
 CC=g++
-CFLAGS=-g -std=c++11 -O2
+CFLAGS=-g -std=c++11
 
 LOGIN = xfilip46
 ZIP_FILE = $(LOGIN).zip
-
 HEADERS = $(wildcard *.h)
+PROGRAMS = tail
 
 .PHONY: all run clean pack
 
-all:
+all: $(PROGRAMS)
 
 run: all
-
+	@for program in $(PROGRAMS); do ./$$program; done;
 
 %.o: %.c $(HEADERS)
 	$(CC) $(CFLAGS) -c $< -o $@

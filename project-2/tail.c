@@ -65,12 +65,14 @@ int main(int argc, char *argv[]) {
     }
     // use the file's input if there is one, otherwise use stdin
     FILE *stream = stdin;
+    FILE *file = NULL;
     char *file_name = argv[optind];
-    FILE *file = fopen(file_name, "r");
-    if (file == NULL && file_name != NULL) {
-        fprintf(stderr, "Invalid file entered.\n");
-        return EXIT_FAILURE;
-    } else {
+    if (file_name != NULL) {
+        file = fopen(file_name, "r");
+        if (file == NULL) {
+            fprintf(stderr, "Invalid file entered.\n");
+            return EXIT_FAILURE;
+        }
         stream = file;  // use file's input for stream
     }
     char line[MAX_LINE_LEN];
@@ -101,6 +103,8 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    fclose(file);
+    if (file) {
+        fclose(file);
+    }
     return EXIT_SUCCESS;
 }

@@ -43,26 +43,23 @@ int get_lines_len_arg(int argc, char *argv[]) {
         }
     }
     // parse the nvalue arguemnt
-    int lines_len;
+    int lines_cnt;
     if (nvalue == NULL) {
-        lines_len = 10;
+        lines_cnt = 10;
     } else {
         char *endptr;
-        lines_len = strtol(nvalue, &endptr, 10);
-        if (*endptr != '\0' || lines_len <= 0) {
+        lines_cnt = strtol(nvalue, &endptr, 10);
+        if (*endptr != '\0' || lines_cnt <= 0) {
             fprintf(stderr, "Optional argument of '-n' must be an integer greater than zero.\n");
             return -1;
         }
     }
 
-    return lines_len;
+    return lines_cnt;
 }
- 
-int main(int argc, char *argv[]) {
-    int lines_len = get_lines_len_arg(argc, argv);
-    if (lines_len == -1) {
-        return EXIT_FAILURE;
-    }
+    
+// get the stream from which to read the lines, NULL if could not open file
+FILE *get_stream(char *argv[]) {
     // use the file's input if there is one, otherwise use stdin
     FILE *stream = stdin;
     FILE *file = NULL;
@@ -71,40 +68,61 @@ int main(int argc, char *argv[]) {
         file = fopen(file_name, "r");
         if (file == NULL) {
             fprintf(stderr, "Invalid file entered.\n");
-            return EXIT_FAILURE;
+            return NULL;
         }
         stream = file;  // use file's input for stream
     }
-    char line[MAX_LINE_LEN];
-    char lines[lines_len][MAX_LINE_LEN];
+    return stream;
+}
+ 
+int main(int argc, char *argv[]) {
+    // get lines count and decide from which stream to read
+    int lines_cnt = get_lines_len_arg(argc, argv);
+    if (lines_cnt == -1) {
+        return EXIT_FAILURE;
+    }
+    FILE *stream = get_stream(argv);
+    if (stream == NULL) {
+        return EXIT_FAILURE;
+    }
+    // dynamically alocate lines
+    char **lines = (char **) malloc(lines_cnt * sizeof(char *));
+    for (size_t i = 0; i < lines_cnt; i++) {
+        lines[i] = (char *) malloc((MAX_LINE_LEN) * sizeof(char));
+    }
     int line_idx = 0;
     int lines_found = 0;
-    while (fgets(line, MAX_LINE_LEN, stream)) {
-        strcpy(lines[line_idx], line);  // copy the line into lines array
+    while (fgets(lines[line_idx], MAX_LINE_LEN, stream)) {
+        char *line = lines[line_idx];
         line_idx++;
-        line_idx %= lines_len;
+        line_idx %= lines_cnt; // rotate the line_idx according to lines count
         lines_found++;
-        if (line[strlen(line) - 1] != '\n') {  // could not read the whole line
+        if (line[strlen(line) - 1] != '\n') { // could not read the whole line
             fprintf(stderr, "Line %d is longer than %d characters."
                 " Skipping the rest of the line.\n", lines_found, MAX_LINE_LEN);
             fscanf(stream, "%*[^\n]\n"); // skip the rest of the line
         }
     }
     // number of entered lines to print is larger than count of lines in file
-    if (lines_len > lines_found) {
+    if (lines_cnt > lines_found) {
         line_idx %= lines_found;  // adjust the line index
     }
     // output print
-    for (size_t i = line_idx; i < (lines_len + line_idx) && i < (lines_found + line_idx); i++) {
-        char *line = lines[i % lines_len];
+    for (size_t i = line_idx; i < (lines_cnt + line_idx) && i < (lines_found + line_idx); i++) {
+        char *line = lines[i % lines_cnt];
         printf("%s", line);
         if (line[strlen(line) - 1] != '\n') {
             printf("\n");  // print new line if line hasn't got one
         }
     }
-
-    if (file) {
-        fclose(file);
+    // close the file
+    if (stream != stdin) {
+        fclose(stream);
     }
+    // free the memory
+    for (size_t i = 0; i < lines_cnt; i++) {
+        free(lines[i]);
+    }
+    free(lines);
     return EXIT_SUCCESS;
 }

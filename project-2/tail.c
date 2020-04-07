@@ -1,8 +1,8 @@
 /**
  * @file tail.c
  * @author Marek Filip (xfilip46), FIT BUT
- * @date 31/Mar/2020
- * @brief IJC-DU2, příklad a)
+ * @date 07/Apr/2020
+ * @brief IJC-DU2, příklad 1)
  * @details Program that prints specified number of last lines of entered file.
  *          If no argument is entered, print last 10 lines by default.
  *          Compiled: g++ 9.3

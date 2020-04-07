@@ -12,7 +12,6 @@
 #include <stdlib.h>
 
 #include <getopt.h>
-#include <ctype.h>
 #include <stdbool.h>
 #include <string.h>
 

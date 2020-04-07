@@ -5,7 +5,7 @@
  * @brief IJC-DU2, příklad 1)
  * @details Program that prints specified number of last lines of entered file.
  *          If no argument is entered, print last 10 lines by default.
- *          Compiled: g++ 9.3
+ *          Compiled: gcc 9.3
  */
 
 #include <stdio.h>

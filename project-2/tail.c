@@ -86,7 +86,7 @@ int main(int argc, char *argv[]) {
     }
     // dynamically alocate lines
     char **lines = (char **) malloc(lines_cnt * sizeof(char *));
-    for (size_t i = 0; i < lines_cnt; i++) {
+    for (int i = 0; i < lines_cnt; i++) {
         lines[i] = (char *) malloc((MAX_LINE_LEN) * sizeof(char));
     }
     int line_idx = 0;
@@ -107,7 +107,7 @@ int main(int argc, char *argv[]) {
         line_idx %= lines_found;  // adjust the line index
     }
     // output print
-    for (size_t i = line_idx; i < (lines_cnt + line_idx) && i < (lines_found + line_idx); i++) {
+    for (int i = line_idx; i < (lines_cnt + line_idx) && i < (lines_found + line_idx); i++) {
         char *line = lines[i % lines_cnt];
         printf("%s", line);
         if (line[strlen(line) - 1] != '\n') {
@@ -119,7 +119,7 @@ int main(int argc, char *argv[]) {
         fclose(stream);
     }
     // free the memory
-    for (size_t i = 0; i < lines_cnt; i++) {
+    for (int i = 0; i < lines_cnt; i++) {
         free(lines[i]);
     }
     free(lines);

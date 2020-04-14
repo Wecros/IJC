@@ -19,8 +19,8 @@ AR = ar
 PROGRAMS = tail wordcount wordcount-dynamic
 HEADERS  = $(wildcard *.h)
 LIBS     = libhtab.a libhtab.so
-STATIC_OBJS  = htab.o io.o
-DYNAMIC_OBJS = htab-d.o io-d.o
+STATIC_OBJS  = htab.o io.o private.o
+DYNAMIC_OBJS = htab-d.o io-d.o private-d.o
 STATIC_LIB   = libhtab.a
 DYNAMIC_LIB  = libhtab.so
 

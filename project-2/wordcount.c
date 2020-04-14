@@ -27,6 +27,8 @@ int main() {
     bool b;
     htab_iterator_t ptr;
 
+    htab_t *htab = htab_init(100000);
+
     /*
     using namespace std;
     unordered_map<string,int> m;  // asociativní pole

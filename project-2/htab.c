@@ -13,18 +13,37 @@ vrací NULL nebo nevalidní iterátor htab_end
 (a uživatel musí testovat výsledek těchto operací)
 */
 
+#include <inttypes.h>  // uint32_t
+#include <string.h>    // size_t
+
 #include "htab.h"
+#include "private.h"
 
 // rozptylovací (hash) funkce (stejná pro všechny tabulky v programu)
 // pokud si v programu definujete stejnou funkci, použije se ta vaše
 size_t htab_hash_fun(htab_key_t str) {
-
+    uint32_t h = 0;     // musí mít 32 bitů
+    const unsigned char *p;
+    for (p = (const unsigned char*) str; *p!='\0'; p++) {
+        h = 65599*h + *p;
+    }
+    return h; 
 }
 
 // funkce pro práci s tabulkou:
 // konstruktor tabulky
 htab_t *htab_init(size_t n) {
+    // allocate hashtable
+    htab_t *hashtable = malloc(sizeof(htab_t) * 1);
+    // allocate items of hastable
+    hashtable->items = malloc(sizeof(struct htab_item) * n);
+    
+    // set each to NULL
+    for (size_t i = 0; i < n; i++) {
+        hashtable->items[i] = NULL;
+    }
 
+    return hashtable;
 }
 // počet záznamů v tabulce
 size_t htab_size(const htab_t * t) {

@@ -24,34 +24,34 @@ vrací NULL nebo nevalidní iterátor htab_end
 size_t htab_hash_fun(htab_key_t str) {
     uint32_t h = 0;     // musí mít 32 bitů
     const unsigned char *p;
-    for (p = (const unsigned char*) str; *p!='\0'; p++) {
-        h = 65599*h + *p;
+    for (p = (const unsigned char*) str; *p != '\0'; p++) {
+        h = 65599 * h + *p;
     }
     return h; 
 }
 
-// funkce pro práci s tabulkou:
 // konstruktor tabulky
+// funkce pro práci s tabulkou:
 htab_t *htab_init(size_t n) {
     // allocate hashtable
-    htab_t *hashtable = malloc(sizeof(htab_t) * 1);
-    // allocate items of hastable
-    hashtable->items = malloc(sizeof(struct htab_item) * n);
-    
-    // set each to NULL
-    for (size_t i = 0; i < n; i++) {
-        hashtable->items[i] = NULL;
-    }
+    htab_t *hastable = malloc(sizeof(htab_t) + sizeof(struct htab_item) * n);
+    // set the hashtable size
+    hastable->size = 0;
+    hastable->arr_size = 0;
 
-    return hashtable;
+    // set each item to NULL
+    for (size_t i = 0; i < n; i++) {
+        hastable->items[i] = NULL;
+    }
+    return hastable;
 }
 // počet záznamů v tabulce
-size_t htab_size(const htab_t * t) {
-
+size_t htab_size(const htab_t *t) {
+    return t->size;
 }
 // velikost pole
-size_t htab_bucket_count(const htab_t * t) {
-
+size_t htab_bucket_count(const htab_t *t) {
+    return t->arr_size;
 }
 
 // hledání
@@ -60,16 +60,53 @@ V tabulce  t  vyhledá záznam odpovídající řetězci  key  a
     - pokud jej nalezne, vrátí iterátor na záznam
     - pokud nenalezne, vrátí iterátor htab_end(t)
 */
-htab_iterator_t htab_find(htab_t * t, htab_key_t key) {
+htab_iterator_t htab_find(htab_t *t, htab_key_t key) {
+    const unsigned hash = htab_hash_fun(key);
+    const unsigned slot = hash % t->size;
+    // look up the iterator
+    htab_iterator_t iter = { t->items[slot], t, slot };
+    // no item found here
+    if (iter.ptr == NULL) {
+        return htab_end(t);
+    }
 
+    // walk through each item in the slot, for case when more items are present
+    while (iter.ptr != NULL) {
+        if (strcmp(iter.ptr->key, key) == 0) {
+            return iter;
+        }
+        iter.ptr = iter.ptr->next;
+    }
 }
 /*
 V tabulce  t  vyhledá záznam odpovídající řetězci  key  a
     - pokud jej nalezne, vrátí iterátor na záznam
     - pokud nenalezne, automaticky přidá záznam a vrátí iterátor
 */
-htab_iterator_t htab_lookup_add(htab_t * t, htab_key_t key) {
+htab_iterator_t htab_lookup_add(htab_t *t, htab_key_t key) {
+    const unsigned hash = htab_hash_fun(key);
+    const unsigned slot = hash % t->size;
+    // look up the iterator
+    htab_iterator_t iter = { t->items[slot], t, slot }; 
 
+    // walk through each item in the slot, for case when more items are present
+    while (iter.ptr != NULL) {
+        if (strcmp(iter.ptr->key, key) == 0) {
+            return iter;
+        }
+        iter.ptr = iter.ptr->next;
+    }
+
+    // no item found here, slot is empty -> create a new one
+    if (iter.ptr == NULL) {  // if statement not needed probably
+        // TODO: make creating items into a function
+        htab_item_t *item = malloc(sizeof(htab_item_t));
+        item->key = key;
+        item->count = 1;
+        item->next = NULL;
+        t->items[slot] = item;
+        return iter;
+    }
 }
 
 // ruší zadaný záznam
@@ -77,18 +114,18 @@ htab_iterator_t htab_lookup_add(htab_t * t, htab_key_t key) {
 ruší zadaný záznam v tabulce (dávejte pozor na zneplatnění it touto
 operací - je to potenciální problém i v C++)
 */
-void htab_erase(htab_t * t, htab_iterator_t it) {
+void htab_erase(htab_t *t, htab_iterator_t it) {
 
 }
 
 // iterátor na první záznam
 /* vrací iterátor odkazující na první záznam */
-htab_iterator_t htab_begin(const htab_t * t) {
-
+htab_iterator_t htab_begin(const htab_t *t) {
+    
 }
 // iterátor _za_ poslední záznam
 /* vrací iterátor označující (neexistující) první záznam za koncem */
-htab_iterator_t htab_end(const htab_t * t) {
+htab_iterator_t htab_end(const htab_t *t) {
 
 }
 
@@ -116,10 +153,10 @@ htab_value_t htab_iterator_set_value(htab_iterator_t it, htab_value_t val) {
 }
 
 // ruší všechny záznamy
-void htab_clear(htab_t * t) {
+void htab_clear(htab_t *t) {
 
 }
 // destruktor tabulky
-void htab_free(htab_t * t) {
+void htab_free(htab_t *t) {
 
 }

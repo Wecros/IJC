@@ -21,13 +21,18 @@ Things to look for:
 
 #include "htab.h"
 
+#define TABLE_SIZE 100000
+
 int main() {
     htab_t *t;
     htab_t *t2;
     bool b;
     htab_iterator_t ptr;
 
-    htab_t *htab = htab_init(100000);
+    htab_t *htab = htab_init(TABLE_SIZE);
+    htab_key_t htab_key = "wecros"; 
+
+    printf("%d\n", htab_hash_fun(htab_key));
 
     /*
     using namespace std;

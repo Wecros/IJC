@@ -18,5 +18,9 @@ struct htab_item {
 };
 
 struct htab {
-    struct htab_item **items;
+    unsigned size;
+    unsigned arr_size;
+    struct htab_item *items[];
 };
+
+typedef struct htab_item htab_item_t;

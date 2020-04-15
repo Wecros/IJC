@@ -1,7 +1,7 @@
 /**
  * @file tail.c
  * @author Marek Filip (xfilip46), FIT BUT
- * @date 07/Apr/2020
+ * @date 2020-Apr-15
  * @brief IJC-DU2, příklad 1)
  * @details Program that prints specified number of last lines of entered file.
  *          If no argument is entered, print last 10 lines by default.

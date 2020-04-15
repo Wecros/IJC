@@ -1,7 +1,7 @@
 /**
  * @file wordcount.c
  * @author Marek Filip (xfilip46), FIT BUT
- * @date 07/Apr/2020
+ * @date 2020-Apr-15
  * @brief IJC-DU2, příklad b)
  * @details The assigment is to rewrite a C++ program to pure C.
  *          The program counts the frequency of words in the output text.
@@ -20,6 +20,7 @@ Things to look for:
 #include <stdbool.h>
 
 #include "htab.h"
+#include "private.h"
 
 #define TABLE_SIZE 100000
 
@@ -32,7 +33,7 @@ int main() {
     htab_t *htab = htab_init(TABLE_SIZE);
     htab_key_t htab_key = "wecros"; 
 
-    printf("%d\n", htab_hash_fun(htab_key));
+    printf("%ld\n", htab_hash_fun(htab_key));
 
     /*
     using namespace std;

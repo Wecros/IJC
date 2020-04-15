@@ -23,6 +23,15 @@ STATIC_OBJS  = htab.o io.o private.o
 DYNAMIC_OBJS = htab-d.o io-d.o private-d.o
 STATIC_LIB   = libhtab.a
 DYNAMIC_LIB  = libhtab.so
+DYNAMIC_OBJS += htab_hash_fun-d.o htab_init-d.o htab_size-d.o htab_bucket_count-d.o \
+		htab_find-d.o htab_lookup_add-d.o htab_erase-d.o htab_begin-d.o htab_end-d.o \
+		htab_iterator_get_value-d.o htab_iterator_set_value-d.o htab_clear-d.o \
+		htab_iterator_next-d.o htab_iterator_get_key-d.o htab_free-d.o
+STATIC_OBJS  += htab_hash_fun.o htab_init.o htab_size.o htab_bucket_count.o \
+		htab_find.o htab_lookup_add.o htab_erase.o htab_begin.o htab_end.o \
+		htab_iterator_get_value.o htab_iterator_set_value.o htab_clear.o \
+		htab_iterator_next.o htab_iterator_get_key.o htab_free.o
+				
 
 .PHONY: all libs pack clean
 

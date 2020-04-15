@@ -1,7 +1,7 @@
 /**
  * @file io.c
  * @author Marek Filip (xfilip46), FIT BUT
- * @date 07/Apr/2020
+ * @date 2020-Apr-15
  * @brief IJC-DU2, příklad b)
  * @details File for defining input-output functions.
  *          Compiled: gcc 9.3

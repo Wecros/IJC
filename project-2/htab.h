@@ -1,7 +1,7 @@
 /**
  * @file htab.h
  * @author Public Domain, used by: Marek Filip (xfilip46), FIT BUT
- * @date 07/Apr/2020
+ * @date 2020-Apr-15
  * @brief IJC-DU2, příklad b)
  * @details
  *          Compiled: gcc 9.3

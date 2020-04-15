@@ -7,11 +7,19 @@
  *          Compiled: gcc 9.3
  */
 
+#include <stdio.h>
+#include <string.h>
+
 #include "private.h"
 
 htab_item_t *item_init(htab_key_t key) {
     htab_item_t *item = malloc(sizeof(htab_item_t *));
-    item->key = key;
+    item->key = malloc(strlen(key) + sizeof(char));
+    if (item == NULL || item->key == NULL) {
+        return NULL;
+    }
+    // item->key = key;
+    strcpy(item->key, key);
     item->count = 1;
     item->next = NULL;
     return item;
@@ -29,4 +37,22 @@ htab_iterator_t iterator_init(const htab_t *t, size_t idx) {
         it.ptr = NULL;
     }
     return it;
+}
+
+// nonessential, for debug, prints the hashtable
+void htab_dump(const htab_t *t) {
+    htab_iterator_t it = htab_begin(t);
+    while (it.idx < htab_bucket_count(t)) {
+        if (htab_iterator_valid(it)) {
+            printf("bucket[%4d]: %s:%ld", it.idx, it.ptr->key, it.ptr->count);
+            it.ptr = it.ptr->next;
+            while (htab_iterator_valid(it)) {
+                printf("|%s:%ld", it.ptr->key, it.ptr->count);
+                it.ptr = it.ptr->next;
+            }
+            printf("\n");
+        }
+
+        it = htab_iterator_next(it); // go to next iterator
+    }
 }

@@ -18,11 +18,11 @@ htab_iterator_t htab_find(htab_t *t, htab_key_t key) {
     const unsigned idx = hash % htab_bucket_count(t);
     htab_iterator_t it = iterator_init(t, idx); // look up the iterator
     // walk through each item in the bucket, for case when more items are present
-    while (it.ptr != NULL) {
+    while (htab_iterator_valid(it)) {
         if (strcmp(htab_iterator_get_key(it), key) == 0) {
             return it;
         }
-        htab_iterator_next(it);
+        it = htab_iterator_next(it);
     }
     // item not found
     return htab_end(t);

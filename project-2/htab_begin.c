@@ -16,8 +16,8 @@
 htab_iterator_t htab_begin(const htab_t *t) {
     htab_iterator_t it = iterator_init(t, 0);
     // go through indeces until you find an entry, return htab_end if not found
-    while (it.ptr == NULL) {
-        htab_iterator_next(it);
+    while (!htab_iterator_valid(it)) {
+        it = htab_iterator_next(it);
     }
     return it;
 }

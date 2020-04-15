@@ -18,6 +18,9 @@
 htab_t *htab_init(size_t n) {
     // allocate hashtable
     htab_t *hastable = malloc(sizeof(htab_t) + sizeof(htab_item_t) * n);
+    if (hastable == NULL) { 
+        return NULL;  // allocation of memory failed
+    }
     hastable->size = 0;
     hastable->arr_size = n; // set the hashtable bucket count
 

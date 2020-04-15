@@ -16,6 +16,7 @@
 #include <getopt.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdarg.h>  // error exit
 
 #define MAX_LINE_LEN 1023  // maximum length of line
 
@@ -94,8 +95,14 @@ void output_line_is_over_limit(char *line, int lines_found, FILE *stream) {
 void output_standard_tail(int lines_cnt, FILE *stream) {
     // dynamically alocate lines
     char **lines = (char **) malloc(lines_cnt * sizeof(char *));
+    if (lines == NULL) {
+        error_exit("Allocation of memory failed.");
+    }
     for (int i = 0; i < lines_cnt; i++) {
         lines[i] = (char *) malloc((MAX_LINE_LEN) * sizeof(char));
+        if (lines[i] == NULL) {
+            error_exit("Allocation of memory failed.");
+        }
     }
     int line_idx = 0;
     int lines_found = 0;
@@ -129,6 +136,9 @@ void output_standard_tail(int lines_cnt, FILE *stream) {
 void output_skipping_tail(int lines_cnt, FILE* stream) {
     int lines_found = 0;
     char *line = (char *) malloc((MAX_LINE_LEN) * sizeof(char));
+    if (line == NULL) {
+        error_exit("Allocation of memory failed.");
+    }
     while (fgets(line, MAX_LINE_LEN, stream)) {
         lines_found++;
         output_line_is_over_limit(line, lines_found, stream);
@@ -140,6 +150,18 @@ void output_skipping_tail(int lines_cnt, FILE* stream) {
             }
         }
     }
+}
+
+// Exits program with custom error message and errcode 1 
+void error_exit(const char* fmt, ...) {
+    va_list ap;
+    va_start(ap, fmt);
+
+    fputs("ERROR: ", stderr);
+    vfprintf(stderr, fmt, ap);
+
+    va_end(ap);
+    exit(EXIT_FAILURE);
 }
  
 int main(int argc, char *argv[]) {

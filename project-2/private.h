@@ -26,7 +26,14 @@ struct htab {
 
 typedef struct htab_item htab_item_t;
 
+// Function for initialization 
 htab_item_t *item_init(htab_key_t key);
 void item_free(htab_item_t *item);
 // htab_iterator_t iterator_init(htab_item_t *ptr, const htab_t *t, size_t idx);
 htab_iterator_t iterator_init(const htab_t *t, size_t idx);
+
+#define DEBUG 1
+#ifdef DEBUG
+// nonessential, for debug, prints the hashtable
+void htab_dump(const htab_t *t);
+#endif

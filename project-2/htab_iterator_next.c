@@ -14,7 +14,7 @@
 
 // Moves the iterator to the next entry in a hashtable.
 htab_iterator_t htab_iterator_next(htab_iterator_t it) {
-    if (it.idx < htab_bucket_count(it.t) - 1) {
+    if (it.idx < htab_bucket_count(it.t)) {
         it.idx++;
         it.ptr = it.t->items[it.idx];
         return it;

@@ -31,9 +31,23 @@ int main() {
     htab_iterator_t ptr;
 
     htab_t *htab = htab_init(TABLE_SIZE);
-    htab_key_t htab_key = "wecros"; 
+    htab_key_t htab_key = "pyro"; 
 
     printf("%ld\n", htab_hash_fun(htab_key));
+
+    htab_lookup_add(htab, "a");
+    htab_lookup_add(htab, "b");
+    htab_lookup_add(htab, "c");
+    htab_lookup_add(htab, "pizza");
+    htab_lookup_add(htab, "pyro");
+    htab_lookup_add(htab, "kalix");
+    htab_lookup_add(htab, "wecros");
+
+    printf("Im here\n");
+
+    htab_dump(htab);
+
+    printf("Im here2\n");
 
     /*
     using namespace std;

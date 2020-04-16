@@ -26,7 +26,7 @@ htab_iterator_t htab_lookup_add(htab_t *t, htab_key_t key) {
             return it;
         }
         prev = it;
-        it.ptr = it.ptr->next;
+        it = htab_iterator_next(it);
     }
 
     // item not found, create a new one, return iterator

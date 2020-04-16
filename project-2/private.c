@@ -45,10 +45,10 @@ void htab_dump(const htab_t *t) {
     while (it.idx < htab_bucket_count(t)) {
         if (htab_iterator_valid(it)) {
             printf("bucket[%4d]: %s:%ld", it.idx, it.ptr->key, it.ptr->count);
-            it.ptr = it.ptr->next;
+            it = htab_iterator_next(it);
             while (htab_iterator_valid(it)) {
                 printf("|%s:%ld", it.ptr->key, it.ptr->count);
-                it.ptr = it.ptr->next;
+                it = htab_iterator_next(it);
             }
             printf("\n");
         }

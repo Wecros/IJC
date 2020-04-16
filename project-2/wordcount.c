@@ -22,6 +22,7 @@ Things to look for:
 #include "htab.h"
 #include "private.h"
 
+// defined this size so the disrtibution is alright and size is not very large
 #define TABLE_SIZE 100000
 
 int main() {
@@ -43,11 +44,8 @@ int main() {
     htab_lookup_add(htab, "kalix");
     htab_lookup_add(htab, "wecros");
 
-    printf("Im here\n");
-
     htab_dump(htab);
 
-    printf("Im here2\n");
 
     /*
     using namespace std;

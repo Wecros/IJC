@@ -14,10 +14,16 @@
 
 // Moves the iterator to the next entry in a hashtable.
 htab_iterator_t htab_iterator_next(htab_iterator_t it) {
-    if (it.idx < htab_bucket_count(it.t)) {
+    if (htab_iterator_valid(it)) {
+        // there are more items in this bucket
+        it.ptr = it.ptr->next;
+    } else if (it.idx < htab_bucket_count(it.t)) {
+        // moving to the next bucket
         it.idx++;
         it.ptr = it.t->items[it.idx];
-        return it;
-    } 
-    return htab_end(it.t);
+    } else {
+        // end of hashtable
+        return htab_end(it.t);
+    }
+    return it;
 }

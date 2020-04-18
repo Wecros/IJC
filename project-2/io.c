@@ -7,7 +7,12 @@
  *          Compiled: gcc 9.3
  */
 
+#include <ctype.h>    // isspace()
+#include <string.h>   // strcpy()
+#include <stdbool.h>  // bool
+
 #include "io.h"
+
 
 /*
 čte jedno slovo ze souboru f do zadaného pole znaků
@@ -27,6 +32,39 @@ Poznámka: Vhodný soubor pro testování je například seznam slov
     nebo texty z http://www.gutenberg.org/
     případně výsledek příkazu:  "seq 1000000 2000000|shuf"
 */
-int get_word(char *s, int max, FILE *f) {
 
+
+/**
+ * @brief
+ * @param s Pointer to a char variable.
+ * @param max Maximum length of a word.
+ * @param f Pointer to file stream.
+ * @returns Returns EOF (-1) if EOF encountered
+ *          0 if word loaded without problems
+ *          1 if word over limit
+ *
+ */
+int get_word(char *s, int max, FILE *f) {
+    char c;
+    bool charFound = false;
+    int charIndex = 0;
+
+    while ((c = fgetc(f)) != EOF) {
+        if (charIndex > max - 1) {
+            fprintf(stderr, "Skipping rest of the word. Over 127 characters.");
+            return 1;
+        } else if (isspace(c) && charFound) {
+            break;  // break out of the loop if char is space and word found
+        } else if (!isspace(c)) {
+            // character is something other than space
+            charFound = true;
+            s[charIndex++] = c;
+        }
+    }
+
+    if (c == EOF) {
+        return EOF;
+    } else {
+        return 0;
+    }
 }

@@ -21,32 +21,53 @@ Things to look for:
 
 #include "htab.h"
 #include "private.h"
+#include "io.h"
 
 // defined this size so the disrtibution is alright and size is not very large
 #define TABLE_SIZE 100000
 
 int main() {
-    htab_t *t;
-    htab_t *t2;
-    bool b;
-    htab_iterator_t ptr;
-
-    htab_t *htab = htab_init(TABLE_SIZE);
-    htab_key_t htab_key = "pyro"; 
+    htab_t *t = htab_init(TABLE_SIZE);
+    htab_key_t htab_key = "pyro";
 
     printf("%ld\n", htab_hash_fun(htab_key));
 
-    htab_lookup_add(htab, "a");
-    htab_lookup_add(htab, "b");
-    htab_lookup_add(htab, "c");
-    htab_lookup_add(htab, "pizza");
-    htab_lookup_add(htab, "pyro");
-    htab_lookup_add(htab, "kalix");
-    htab_lookup_add(htab, "wecros");
+    htab_lookup_add(t, "a");
+    htab_lookup_add(t, "b");
+    htab_lookup_add(t, "c");
+    htab_lookup_add(t, "pizza");
+    htab_lookup_add(t, "pyro");
+    htab_lookup_add(t, "kalix");
+    htab_lookup_add(t, "wecros");
 
-    htab_dump(htab);
+    htab_dump(t);
 
 
+    int retcode = 0;
+    while (retcode != EOF) {
+        char word[MAX_WORD_LEN] = "\0";
+        retcode = get_word(word, MAX_WORD_LEN, stdin);
+        // printf("%s ", word);
+
+        // htab_lookup_add(t, word);
+        htab_iterator_t iter = htab_find(t, word);
+        if (htab_iterator_equal(iter, htab_end(t))) {
+            htab_lookup_add(t, word);
+        } else {
+            iter.ptr->count++;
+        }
+    }
+    printf("\n");
+
+    htab_dump(t);
+
+    // for (size_t i = 0; i < 100; i++) {
+    //     char word[MAX_WORD_LEN] = "\0";
+    //     retcode = get_word(word, MAX_WORD_LEN, stdin);
+    //     printf("%s ", word);
+    // }
+
+    printf("End of wordcount.c\n");
     /*
     using namespace std;
     unordered_map<string,int> m;  // asociativní pole

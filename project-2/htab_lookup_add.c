@@ -13,8 +13,9 @@
 #include "private.h"
 #include <stdio.h>
 
-// Returns an iterator containing the specified key. Creates a new entry 
+// Returns an iterator containing the specified key. Creates a new entry
 // in the hashtable and returns appropriate iterator if key not found.
+// If the key is already there, increment the count by one.
 htab_iterator_t htab_lookup_add(htab_t *t, htab_key_t key) {
     const unsigned hash = htab_hash_fun(key);
     const unsigned idx = hash % htab_bucket_count(t);
@@ -23,6 +24,7 @@ htab_iterator_t htab_lookup_add(htab_t *t, htab_key_t key) {
     // walk through each item in the bucket, for case when more items are present
     while (htab_iterator_valid(it)) {
         if (strcmp(htab_iterator_get_key(it), key) == 0) {
+            it.ptr->count++; // increment the count by one
             return it;
         }
         prev = it;

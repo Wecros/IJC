@@ -42,23 +42,32 @@ Poznámka: Vhodný soubor pro testování je například seznam slov
  * @returns Returns EOF (-1) if EOF encountered
  *          0 if word loaded without problems
  *          1 if word over limit
- *
  */
 int get_word(char *s, int max, FILE *f) {
     char c;
     bool charFound = false;
     int charIndex = 0;
+    static bool warningPrinted = false;
 
     while ((c = fgetc(f)) != EOF) {
-        if (charIndex > max - 1) {
-            fprintf(stderr, "Skipping rest of the word. Over 127 characters.");
+        if (charIndex > max) {
+            if (!warningPrinted) {
+                warningPrinted = true;
+                fprintf(stderr, "Encountered word longer than 127 characters, " 
+                                "skipping the rest of the word.\n");
+            }
+            // skip the rest of word
+            while (!isspace(c) && c != EOF) {
+                c = fgetc(f);
+            }
             return 1;
         } else if (isspace(c) && charFound) {
             break;  // break out of the loop if char is space and word found
         } else if (!isspace(c)) {
             // character is something other than space
             charFound = true;
-            s[charIndex++] = c;
+            s[charIndex] = c;
+            charIndex++;
         }
     }
 

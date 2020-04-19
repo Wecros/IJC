@@ -14,29 +14,41 @@
 
 htab_item_t *item_init(htab_key_t key) {
     htab_item_t *item = malloc(sizeof(htab_item_t *));
-    item->key = malloc(strlen(key) + sizeof(char));
-    if (item == NULL || item->key == NULL) {
+    char *keymem = malloc(strlen(key) + sizeof(char));
+    if (item == NULL || keymem == NULL) {
         return NULL;
     }
-    // item->key = key;
-    strcpy(item->key, key);
+    strcpy(keymem, key);
+    item->key = keymem;
     item->count = 1;
     item->next = NULL;
     return item;
 }
 
-void item_free(htab_item_t *item) {
-    // item->key = NULL;  // const
-    item->count = 0;
-    free(item);
-}
-
 htab_iterator_t iterator_init(const htab_t *t, size_t idx) {
     htab_iterator_t it = { t->items[idx], t, idx };
-    if (idx >= t->arr_size) {  // is this needed?
+    if (idx >= t->arr_size) {
         it.ptr = NULL;
     }
     return it;
+}
+
+void htab_output(const htab_t *t) {
+    htab_iterator_t it = htab_begin(t);
+    while (it.idx < htab_bucket_count(t)) {
+        if (htab_iterator_valid(it)) {
+            printf("%s\t%d\n", htab_iterator_get_key(it),
+                htab_iterator_get_value(it));
+            it = htab_iterator_next(it);
+            while (htab_iterator_valid(it)) {
+                printf("%s\t%d\n", htab_iterator_get_key(it),
+                    htab_iterator_get_value(it));
+                it = htab_iterator_next(it);
+            }
+        }
+
+        it = htab_iterator_next(it); // go to next iterator
+    }
 }
 
 // nonessential, for debug, prints the hashtable
@@ -44,14 +56,15 @@ void htab_dump(const htab_t *t) {
     htab_iterator_t it = htab_begin(t);
     while (it.idx < htab_bucket_count(t)) {
         if (htab_iterator_valid(it)) {
-            printf("%s\t%ld\n", it.ptr->key, it.ptr->count);
+            printf("[bucket %4ld]: %s:%d", it.idx, htab_iterator_get_key(it),
+                htab_iterator_get_value(it));
             it = htab_iterator_next(it);
             while (htab_iterator_valid(it)) {
-                printf("%s\t%ld\n", it.ptr->key, it.ptr->count);
-                // printf("|%s:%ld", it.ptr->key, it.ptr->count);
+                printf("|%s:%d", htab_iterator_get_key(it),
+                    htab_iterator_get_value(it));
                 it = htab_iterator_next(it);
             }
-            // printf("\n");
+            printf("\n");
         }
 
         it = htab_iterator_next(it); // go to next iterator

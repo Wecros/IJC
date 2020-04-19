@@ -6,6 +6,9 @@
  * @details Program that prints specified number of last lines of entered file.
  *          If no argument is entered, print last 10 lines by default.
  *          If positive n argument is entered, skip the n lines and print
+ *          Exit codes: 0 - exited normally
+ *                      1 - exited with encountered long line
+ *                      2 - program terminated, exit failure
  *          the rest of the file.
  *          Compiled: gcc 9.3
  */
@@ -19,6 +22,21 @@
 #include <stdarg.h>  // error exit
 
 #define MAX_LINE_LEN 1023  // maximum length of line
+#define EXIT_SUCCESS   0   // exited normally
+#define EXIT_LONG_LINE 1   // exited with encountered long line
+#define EXIT_ERROR     2   // program terminated, exit failure
+
+// Exits program with custom error message and errcode 1
+void error_exit(const char* fmt, ...) {
+    va_list ap;
+    va_start(ap, fmt);
+
+    fputs("ERROR: ", stderr);
+    vfprintf(stderr, fmt, ap);
+
+    va_end(ap);
+    exit(EXIT_ERROR);
+}
 
 // function to testing arguments, returns number of lines to print, -1 if error
 // returns positive lines count if the argument is passed in standard way
@@ -58,7 +76,7 @@ int get_lines_len_arg(int argc, char *argv[], bool *use_skipping) {
             return -1;
         }
         if (nvalue[0] == '+') {
-            *use_skipping = true; 
+            *use_skipping = true;
         }
     }
 
@@ -83,16 +101,15 @@ FILE *get_stream(char *argv[]) {
 }
 
 // Function for outputting error if line is longer than limit, skip the rest
-void output_line_is_over_limit(char *line, int lines_found, FILE *stream) {
-    if (line[strlen(line) - 1] != '\n') { // could not read the whole line
-        fprintf(stderr, "Line %d is longer than %d characters."
-            " Skipping the rest of the line.\n", lines_found, MAX_LINE_LEN);
-        fscanf(stream, "%*[^\n]\n"); // skip the rest of the line
-    }
+void output_line_over_limit(int lines_found, FILE *stream) {
+    fprintf(stderr, "Line %d is longer than %d characters."
+        " Skipping the rest of the line.\n", lines_found, MAX_LINE_LEN);
+    fscanf(stream, "%*[^\n]\n"); // skip the rest of the line
 }
 
 // Function for outputting standard tail
-void output_standard_tail(int lines_cnt, FILE *stream) {
+int output_standard_tail(int lines_cnt, FILE *stream) {
+    int retcode = EXIT_SUCCESS;
     // dynamically alocate lines
     char **lines = (char **) malloc(lines_cnt * sizeof(char *));
     if (lines == NULL) {
@@ -111,7 +128,10 @@ void output_standard_tail(int lines_cnt, FILE *stream) {
         line_idx++;
         line_idx %= lines_cnt; // rotate the line_idx according to lines count
         lines_found++;
-            output_line_is_over_limit(line, lines_found, stream);
+        if (line[strlen(line) - 1] != '\n') { // could not read the whole line
+            output_line_over_limit(lines_found, stream);
+            retcode = EXIT_LONG_LINE;
+        }
     }
     // number of entered lines to print is larger than count of lines in file
     if (lines_cnt > lines_found) {
@@ -130,10 +150,12 @@ void output_standard_tail(int lines_cnt, FILE *stream) {
         free(lines[i]);
     }
     free(lines);
+    return retcode;
 }
 
 // Function for outputting skipping tail, using 'tail -n +3' arg
-void output_skipping_tail(int lines_cnt, FILE* stream) {
+int output_skipping_tail(int lines_cnt, FILE* stream) {
+    int retcode = EXIT_SUCCESS;
     int lines_found = 0;
     char *line = (char *) malloc((MAX_LINE_LEN) * sizeof(char));
     if (line == NULL) {
@@ -141,7 +163,10 @@ void output_skipping_tail(int lines_cnt, FILE* stream) {
     }
     while (fgets(line, MAX_LINE_LEN, stream)) {
         lines_found++;
-        output_line_is_over_limit(line, lines_found, stream);
+        if (line[strlen(line) - 1] != '\n') { // could not read the whole line
+            output_line_over_limit(lines_found, stream);
+            retcode = EXIT_LONG_LINE;
+        }
         if (lines_found >= lines_cnt) {
             if (line[strlen(line) - 1] != '\n') { // could not read the whole line
                 printf("%s\n", line);
@@ -150,40 +175,30 @@ void output_skipping_tail(int lines_cnt, FILE* stream) {
             }
         }
     }
+    return retcode;
 }
 
-// Exits program with custom error message and errcode 1 
-void error_exit(const char* fmt, ...) {
-    va_list ap;
-    va_start(ap, fmt);
-
-    fputs("ERROR: ", stderr);
-    vfprintf(stderr, fmt, ap);
-
-    va_end(ap);
-    exit(EXIT_FAILURE);
-}
- 
 int main(int argc, char *argv[]) {
+    int retcode = EXIT_SUCCESS;
     bool use_skipping = false;  // flag for whether to use skipping or not
     // get lines count and decide from which stream to read
     int lines_cnt = get_lines_len_arg(argc, argv, &use_skipping);
     if (lines_cnt == -1) {
-        return EXIT_FAILURE;
+        return EXIT_ERROR;
     }
     FILE *stream = get_stream(argv);
     if (stream == NULL) {
-        return EXIT_FAILURE;
+        return EXIT_ERROR;
     }
 
     if (use_skipping) {
-        output_skipping_tail(lines_cnt, stream);
+        retcode = output_skipping_tail(lines_cnt, stream);
     } else if (lines_cnt > 0) {
-        output_standard_tail(lines_cnt, stream);
+        retcode = output_standard_tail(lines_cnt, stream);
     }
     // close the file
     if (stream != stdin) {
         fclose(stream);
     }
-    return EXIT_SUCCESS;
+    return retcode;
 }

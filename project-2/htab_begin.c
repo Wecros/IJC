@@ -9,7 +9,6 @@
  *          Compiled: gcc 9.3
  */
 
-#include "htab.h"
 #include "private.h"
 
 // Returns an iterator pointing to the first nonnull entry in hastable.

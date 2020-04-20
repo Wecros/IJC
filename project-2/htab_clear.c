@@ -13,13 +13,11 @@
 
 // Removes all entries from passed hashtable.
 void htab_clear(htab_t *t) {
-    // go through each entry and clear it
+    // go through each entry and erase it
     htab_iterator_t it = htab_begin(t);
-    while (it.idx < htab_bucket_count(t)) {
-        if (htab_iterator_valid(it)) {
-            htab_erase(t, it);
-        }
-        it = htab_iterator_next(it);
+    while (!htab_iterator_equal(it, htab_end(t))) {
+        htab_iterator_t next = htab_iterator_next(it);
+        htab_erase(t, it);
+        it = next;
     }
-    t->size = 0; // set entry count to 0
 }

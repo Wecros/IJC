@@ -7,13 +7,17 @@
  *          Compiled: gcc 9.3
  */
 
-#include <stdio.h>
+#include <stdio.h> // TODO: remove
 #include <string.h>
 
 #include "private.h"
 
-htab_item_t *item_init(htab_key_t key) {
-    htab_item_t *item = malloc(sizeof(htab_item_t *));
+// Extern the inline functions from 'htab.h'
+extern bool htab_iterator_valid(htab_iterator_t it);
+extern bool htab_iterator_equal(htab_iterator_t it1, htab_iterator_t it2);
+
+htab_item_t *item_init(htab_t *t, htab_key_t key) {
+    htab_item_t *item = (htab_item_t *) malloc(sizeof(htab_item_t));
     char *keymem = malloc(strlen(key) + sizeof(char));
     if (item == NULL || keymem == NULL) {
         return NULL;
@@ -22,24 +26,29 @@ htab_item_t *item_init(htab_key_t key) {
     item->key = keymem;
     item->count = 1;
     item->next = NULL;
+    t->size++;  // increment the entry count
     return item;
 }
 
-htab_iterator_t iterator_init(const htab_t *t, size_t idx) {
+void item_free(htab_t *t, htab_item_t *item) {
+    item->count = 0;
+    item->next = NULL;
+    free((char *) item->key);  // free the key pointer, casted
+    free(item);
+    t->size--;  // decerement the entry count
+}
+
+htab_iterator_t iterator_init(const htab_t *t, const size_t idx) {
     htab_iterator_t it = { t->items[idx], t, idx };
     if (idx >= t->arr_size) {
         it.ptr = NULL;
     }
+    it.idx = idx;
     return it;
 }
 
-
-// nonessential, for debug, prints the hashtable
-void htab_dump(const htab_t *t) {
-    htab_iterator_t it = htab_begin(t);
-    while (!htab_iterator_equal(it, htab_end(t))) {
-        printf("[bucket %4ld]: %s:%d\n", it.idx, htab_iterator_get_key(it),
-            htab_iterator_get_value(it));
-        it = htab_iterator_next(it); // go to next iterator
-    }
+htab_iterator_t get_iterator_from_key(const htab_t *t, htab_key_t key) {
+    const unsigned hash = htab_hash_fun(key);
+    const unsigned idx = hash % htab_bucket_count(t);
+    return iterator_init(t, idx);
 }

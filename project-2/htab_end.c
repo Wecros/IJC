@@ -9,7 +9,6 @@
  *          Compiled: gcc 9.3
  */
 
-#include "htab.h"
 #include "private.h"
 
 // Returns iterator pointing to nonexisting entry at the end of hashtable.

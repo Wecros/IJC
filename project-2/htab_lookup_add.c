@@ -10,29 +10,34 @@
  */
 
 #include "private.h"
-#include <stdio.h>
+#include <stdio.h>  // TODO: remove
 
 // Returns an iterator containing the specified key. Creates a new entry
 // in the hashtable and returns appropriate iterator if key not found.
 // If the key is already there, increment the count by one.
+// If allocation of memory for entry failed, return htab_end(t).
 htab_iterator_t htab_lookup_add(htab_t *t, htab_key_t key) {
-    const unsigned hash = htab_hash_fun(key);
-    const unsigned idx = hash % htab_bucket_count(t);
-    htab_iterator_t it = iterator_init(t, idx); // look up the iterator
+    htab_iterator_t it = get_iterator_from_key(t, key);
     htab_iterator_t prev = htab_end(t);  // for linking the bucket together
     // walk through each item in the bucket, for case when more items are present
-    while (htab_iterator_valid(it)) {
-        if (strcmp(htab_iterator_get_key(it), key) == 0) {
-            it.ptr->count++; // increment the count by one
-            return it;
+    if (htab_iterator_valid(it)) {
+        size_t old_idx = it.idx;
+        while (it.idx == old_idx) {
+            if (strcmp(htab_iterator_get_key(it), key) == 0) {
+                // increment the count by one
+                htab_iterator_set_value(it, htab_iterator_get_value(it) + 1);
+                return it;
+            }
+            prev = it;
+            it = htab_iterator_next(it);
         }
-        prev = it;
-        it = htab_iterator_next(it);
+        it.idx = old_idx; // get back the previous index
     }
 
     // item not found, create a new one, return iterator
-    htab_item_t *item = item_init(key);
+    htab_item_t *item = item_init(t, key);
     if (item == NULL) {
+        t->size--;
         return htab_end(t);  // allocation of memory failed
     }
     it.ptr = item;
@@ -42,7 +47,7 @@ htab_iterator_t htab_lookup_add(htab_t *t, htab_key_t key) {
         prev.ptr->next = it.ptr;
     } else {
         // assign item to the start of the bucket
-        t->items[idx] = it.ptr;
+        t->items[it.idx] = it.ptr;
     }
     return it;
 }

@@ -15,8 +15,8 @@ ZIP_FILE = $(LOGIN).zip
 CC = gcc
 CXX = g++
 CFLAGS   = -g -std=c99 -pedantic -Wall -Wextra
-CFLAGS  += -O2
-SYMBOL   = -DHASHTEST
+# CFLAGS  += -O2
+CFLAGS  += $(SYMBOL) # use my own hash function, add var from CLI
 CXXFLAGS = -std=c++17 -pedantic -Wall -Wextra
 AR = ar
 
@@ -27,12 +27,12 @@ STATIC_LIB   = libhtab.a
 DYNAMIC_LIB  = libhtab.so
 
 # base objects + all the individual hashtable modules
+OTHER_OBJS = io.o
 LIB_OBJS  = private.o
 LIB_OBJS += htab_hash_fun.o htab_init.o htab_size.o htab_bucket_count.o \
 	htab_find.o htab_lookup_add.o htab_erase.o htab_begin.o htab_end.o \
 	htab_iterator_get_value.o htab_iterator_set_value.o htab_clear.o \
 	htab_iterator_next.o htab_iterator_get_key.o htab_free.o
-OTHER_OBJS = io.o
 
 BUILD_DIR = build
 
@@ -52,10 +52,10 @@ $(DYNAMIC_LIB): $(LIB_OBJS)
 	$(CC) -shared -fPIC $^ -o $@
 
 wordcount: wordcount.o $(OTHER_OBJS) $(STATIC_LIB)
-	$(CC) $(CFLAGS) $(SYMBOL) -o $@ -static $< $(OTHER_OBJS) -L. -lhtab
+	$(CC) $(CFLAGS) -o $@ -static $< $(OTHER_OBJS) -L. -lhtab
 
 wordcount-dynamic: wordcount.o $(OTHER_OBJS) $(DYNAMIC_LIB)
-	$(CC) $(CFLAGS) $(SYMBOL) -o $@ $< $(OTHER_OBJS) -L. -lhtab
+	$(CC) $(CFLAGS) -o $@ $< $(OTHER_OBJS) -L. -lhtab
 
 # - fPIC is used for dynamic library
 %.o: %.c $(HEADERS)

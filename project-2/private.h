@@ -12,6 +12,8 @@
 
 #include "htab.h"
 
+typedef struct htab_item htab_item_t;
+
 struct htab_item {
     htab_key_t key;
     size_t count;
@@ -21,19 +23,18 @@ struct htab_item {
 struct htab {
     unsigned size;      // count of entries
     unsigned arr_size;  // count of buckets (linked lists)
-    struct htab_item *items[];  // pointers to buckets
+    htab_item_t *items[];  // pointers to buckets
 };
 
-typedef struct htab_item htab_item_t;
 
-// Function for initialization
-htab_item_t *item_init(htab_key_t key);
-// htab_iterator_t iterator_init(htab_item_t *ptr, const htab_t *t, size_t idx);
-htab_iterator_t iterator_init(const htab_t *t, size_t idx);
-void htab_output(const htab_t *t);
+// Function for entry initialization.
+htab_item_t *item_init(htab_t *t, htab_key_t key);
 
-#define DEBUG 1
-#ifdef DEBUG
-// nonessential, for debug, prints the hashtable
-void htab_dump(const htab_t *t);
-#endif
+// Function for freeing the item and reducing the entry count.
+void item_free(htab_t *t, htab_item_t *item);
+
+// Function for iterator initialization.
+htab_iterator_t iterator_init(const htab_t *t, const size_t idx);
+
+// Create the iterator from the passed key. Uses hashing function.
+htab_iterator_t get_iterator_from_key(const htab_t *t, htab_key_t key);

@@ -16,16 +16,16 @@
 // Initializes a hashatble with passed bucket count.
 htab_t *htab_init(size_t n) {
     // allocate hashtable
-    htab_t *hastable = malloc(sizeof(htab_t) + sizeof(htab_item_t) * n);
-    if (hastable == NULL) {
+    htab_t *hashtable = (htab_t *) malloc(sizeof(htab_t) + sizeof(htab_item_t) * n);
+    if (hashtable == NULL) {
         return NULL;  // allocation of memory failed
     }
-    hastable->size = 0;
-    hastable->arr_size = n; // set the hashtable bucket count
+    hashtable->size = 0;
+    hashtable->arr_size = n; // set the hashtable bucket count
 
     // set each item to NULL
     for (size_t i = 0; i < n; i++) {
-        hastable->items[i] = NULL;
+        hashtable->items[i] = NULL;
     }
-    return hastable;
+    return hashtable;
 }

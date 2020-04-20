@@ -11,7 +11,6 @@
 
 #include <string.h>
 
-#include "htab.h"
 #include "private.h"
 
 // Returns a count of entries of the hashtable.

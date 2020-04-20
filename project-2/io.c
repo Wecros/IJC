@@ -53,7 +53,7 @@ int get_word(char *s, int max, FILE *f) {
         if (charIndex > max) {
             if (!warningPrinted) {
                 warningPrinted = true;
-                fprintf(stderr, "Encountered word longer than 127 characters, " 
+                fprintf(stderr, "Encountered word longer than 127 characters, "
                                 "skipping the rest of the word.\n");
             }
             // skip the rest of word

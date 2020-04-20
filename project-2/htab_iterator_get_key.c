@@ -9,13 +9,9 @@
  *          Compiled: gcc 9.3
  */
 
-#include "htab.h"
 #include "private.h"
 
-// Returns key value of an entry via iterator, NULL if key does not exist.
+// Returns key value of an entry via iterator. Entry must exist.
 htab_key_t htab_iterator_get_key(htab_iterator_t it) {
-    if (!htab_iterator_valid(it)) {
-        return NULL;
-    }
     return it.ptr->key;
 }

@@ -9,13 +9,9 @@
  *          Compiled: gcc 9.3
  */
 
-#include "htab.h"
 #include "private.h"
 
-// Returns count value of an entry via iterator, NULL if value does not exist.
+// Returns count value of an entry via iterator. Entry must exist.
 htab_value_t htab_iterator_get_value(htab_iterator_t it) {
-    if (!htab_iterator_valid(it)) {
-        return -1;
-    }
     return it.ptr->count;
 }

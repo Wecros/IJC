@@ -7,8 +7,6 @@
  *          Compiled: gcc 9.3
  */
 
-#define MAX_WORD_LEN 127
-#define MAX_WORD_LEN_STRING "127"
 #include <stdio.h>
 
 int get_word(char *s, int max, FILE *f);

@@ -9,7 +9,7 @@
 CC=gcc
 PRIMES=primes.c
 NAME=$(PRIMES)
-CFLAGS=-g -std=c11 -pedantic -Wall -Wextra -O2
+CFLAGS=-g -std=c11 -pedantic -Wall -Wextra
 LDFLAGS=-lm
 
 LOGIN = xfilip46

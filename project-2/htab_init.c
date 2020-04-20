@@ -11,7 +11,6 @@
 
 #include <string.h>
 
-#include "htab.h"
 #include "private.h"
 
 // Initializes a hashatble with passed bucket count.

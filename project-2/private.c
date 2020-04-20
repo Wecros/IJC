@@ -33,40 +33,13 @@ htab_iterator_t iterator_init(const htab_t *t, size_t idx) {
     return it;
 }
 
-void htab_output(const htab_t *t) {
-    htab_iterator_t it = htab_begin(t);
-    while (it.idx < htab_bucket_count(t)) {
-        if (htab_iterator_valid(it)) {
-            printf("%s\t%d\n", htab_iterator_get_key(it),
-                htab_iterator_get_value(it));
-            it = htab_iterator_next(it);
-            while (htab_iterator_valid(it)) {
-                printf("%s\t%d\n", htab_iterator_get_key(it),
-                    htab_iterator_get_value(it));
-                it = htab_iterator_next(it);
-            }
-        }
-
-        it = htab_iterator_next(it); // go to next iterator
-    }
-}
 
 // nonessential, for debug, prints the hashtable
 void htab_dump(const htab_t *t) {
     htab_iterator_t it = htab_begin(t);
-    while (it.idx < htab_bucket_count(t)) {
-        if (htab_iterator_valid(it)) {
-            printf("[bucket %4ld]: %s:%d", it.idx, htab_iterator_get_key(it),
-                htab_iterator_get_value(it));
-            it = htab_iterator_next(it);
-            while (htab_iterator_valid(it)) {
-                printf("|%s:%d", htab_iterator_get_key(it),
-                    htab_iterator_get_value(it));
-                it = htab_iterator_next(it);
-            }
-            printf("\n");
-        }
-
+    while (!htab_iterator_equal(it, htab_end(t))) {
+        printf("[bucket %4ld]: %s:%d\n", it.idx, htab_iterator_get_key(it),
+            htab_iterator_get_value(it));
         it = htab_iterator_next(it); // go to next iterator
     }
 }

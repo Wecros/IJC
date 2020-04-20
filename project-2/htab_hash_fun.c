@@ -12,7 +12,7 @@
 #include <string.h>
 #include <inttypes.h>
 
-#include "htab.h"
+#include "private.h"
 
 // Uniform distribution hash function (sdbm) for hashtable, returns a hash num
 size_t htab_hash_fun(htab_key_t str) {
@@ -21,5 +21,5 @@ size_t htab_hash_fun(htab_key_t str) {
     for (p = (const unsigned char *) str; *p != '\0'; p++) {
         h = 65599 * h + *p;
     }
-    return h; 
+    return h;
 }

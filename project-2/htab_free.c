@@ -9,8 +9,7 @@
  *          Compiled: gcc 9.3
  */
 
-#include <stdlib.h>
-#include "htab.h"
+#include "private.h"
 
 // Frees the hashtable
 void htab_free(htab_t *t) {

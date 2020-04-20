@@ -9,7 +9,6 @@
  *          Compiled: gcc 9.3
  */
 
-#include "htab.h"
 #include "private.h"
 
 // Removes all entries from passed hashtable.

@@ -16,6 +16,7 @@ CC = gcc
 CXX = g++
 CFLAGS   = -g -std=c99 -pedantic -Wall -Wextra
 CFLAGS  += -O2
+SYMBOL   = -DHASHTEST
 CXXFLAGS = -std=c++17 -pedantic -Wall -Wextra
 AR = ar
 
@@ -26,13 +27,12 @@ STATIC_LIB   = libhtab.a
 DYNAMIC_LIB  = libhtab.so
 
 # base objects + all the individual hashtable modules
-STATIC_OBJS  = io.o private.o
-STATIC_OBJS += htab_hash_fun.o htab_init.o htab_size.o htab_bucket_count.o \
+LIB_OBJS  = private.o
+LIB_OBJS += htab_hash_fun.o htab_init.o htab_size.o htab_bucket_count.o \
 	htab_find.o htab_lookup_add.o htab_erase.o htab_begin.o htab_end.o \
 	htab_iterator_get_value.o htab_iterator_set_value.o htab_clear.o \
 	htab_iterator_next.o htab_iterator_get_key.o htab_free.o
-DYNAMIC_OBJS := $(patsubst %.o, %-d.o, $(STATIC_OBJS)) # string substitution
-STATIC_OBJS  := $(DYNAMIC_OBJS)
+OTHER_OBJS = io.o
 
 BUILD_DIR = build
 
@@ -44,23 +44,21 @@ run: all
 	./wordcount
 	LD_LIBRARY_PATH='.' ./wordcount-dynamic
 
-$(STATIC_LIB): $(STATIC_OBJS)
+$(STATIC_LIB): $(LIB_OBJS)
 	$(AR) crs $(STATIC_LIB) $^
 	ranlib $(STATIC_LIB)
 
-$(DYNAMIC_LIB): $(DYNAMIC_OBJS)
+$(DYNAMIC_LIB): $(LIB_OBJS)
 	$(CC) -shared -fPIC $^ -o $@
 
-wordcount: wordcount.o $(STATIC_LIB)
-	$(CC) $(CFLAGS) -o $@ -static $< -L. -lhtab
+wordcount: wordcount.o $(OTHER_OBJS) $(STATIC_LIB)
+	$(CC) $(CFLAGS) $(SYMBOL) -o $@ -static $< $(OTHER_OBJS) -L. -lhtab
 
-wordcount-dynamic: wordcount.o $(DYNAMIC_LIB)
-	$(CC) $(CFLAGS) -o $@ $< -L. -lhtab
+wordcount-dynamic: wordcount.o $(OTHER_OBJS) $(DYNAMIC_LIB)
+	$(CC) $(CFLAGS) $(SYMBOL) -o $@ $< $(OTHER_OBJS) -L. -lhtab
 
+# - fPIC is used for dynamic library
 %.o: %.c $(HEADERS)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-%-d.o: %.c $(HEADERS)
 	$(CC) $(CFLAGS) -c -fPIC $< -o $@
 
 libs: $(LIBS)

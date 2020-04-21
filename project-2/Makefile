@@ -14,10 +14,10 @@ ZIP_FILE = $(LOGIN).zip
 
 CC = gcc
 CXX = g++
-CFLAGS   = -g -std=c99 -pedantic -Wall -Wextra -0g
-# CFLAGS  += -O2
-CFLAGS  += $(SYMBOL) # use my own hash function, add var from CLI
-CXXFLAGS = -std=c++17 -pedantic -Wall -Wextra
+CFLAGS   = -g -std=c99 -pedantic -Wall -Wextra
+CFLAGS  += -O2  # makes little difference
+CFLAGS  += $(SYMBOL) # for using my own hash function, add var from CLI
+CXXFLAGS = -std=c++17 -pedantic -Wall -Wextra -O2
 AR = ar
 
 PROGRAMS = tail wordcount wordcount-dynamic
@@ -33,8 +33,6 @@ LIB_OBJS += htab_hash_fun.o htab_init.o htab_size.o htab_bucket_count.o \
 	htab_find.o htab_lookup_add.o htab_erase.o htab_begin.o htab_end.o \
 	htab_iterator_get_value.o htab_iterator_set_value.o htab_clear.o \
 	htab_iterator_next.o htab_iterator_get_key.o htab_free.o
-
-BUILD_DIR = build
 
 .PHONY: all libs pack clean
 
@@ -57,14 +55,14 @@ wordcount: wordcount.o $(OTHER_OBJS) $(STATIC_LIB)
 wordcount-dynamic: wordcount.o $(OTHER_OBJS) $(DYNAMIC_LIB)
 	$(CC) $(CFLAGS) -o $@ $< $(OTHER_OBJS) -L. -lhtab
 
-# - fPIC is used for dynamic library
+# - fPIC is used for dynamic library, its also okay to use with static
 %.o: %.c $(HEADERS)
 	$(CC) $(CFLAGS) -c -fPIC $< -o $@
 
 libs: $(LIBS)
 
 pack: $(ZIP_FILE)
-$(ZIP_FILE): *.c *.cc *.h Makefile
+$(ZIP_FILE): *.c *.h Makefile
 	zip $@ $^
 
 clean:

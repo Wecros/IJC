@@ -10,8 +10,7 @@
  *          Compiled: gcc 9.3
  */
 
-/*
-What I found when comparing times between C and C++ versions:
+/* What I found when comparing times between C and C++ versions:
     - The times are almost identical in most cases.
     - In cases where C has the ideal table_size, it is faster.
       e.g. for input seq 100000 1000000 if TABLE_SIZE = 900000
@@ -26,10 +25,13 @@ What I found when comparing times between C and C++ versions:
 
 #include "htab.h"
 #include "io.h"
-#include "private.h"  // TODO: remove
 
-// defined this size so the disrtibution is alright and size
-// is not very large but allows adequate speed
+/* Notes to TABLE_SIZE:
+    - defined this size so the disrtibution is alright and size
+      is not very large but allows adequate speed
+    - if the number of keys is significantly larger than this limit
+      it would be advised to raise it accordingly.
+*/
 #define TABLE_SIZE      100000
 #define MAX_WORD_LEN    127
 #define EXIT_SUCCESS    0   // exited normally
@@ -75,7 +77,7 @@ void htab_output(const htab_t *t) {
 int main() {
     htab_t *t = htab_init(TABLE_SIZE);
     if (t == NULL) {
-        fprintf(stderr, "ERROR: Allocation of memory failed.");
+        fprintf(stderr, "ERROR: Allocation of memory failed.\n");
         return EXIT_ERROR;
     }
 
@@ -88,10 +90,11 @@ int main() {
             // Add the word to the hashtable or increment the count of word
             htab_iterator_t iter = htab_lookup_add(t, word);
             if (!htab_iterator_valid(iter)) {
-                fprintf(stderr, "ERROR: Allocation of memory failed.");
+                fprintf(stderr, "ERROR: Allocation of memory failed.\n");
                 return EXIT_ERROR;
             }
-        } else if (retcode == 1) {
+        }
+        if (retcode == 1) {
             exitcode = EXIT_LONG_WORD;
         }
     }

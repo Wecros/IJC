@@ -113,12 +113,12 @@ int output_standard_tail(int lines_cnt, FILE *stream) {
     // dynamically alocate lines
     char **lines = (char **) malloc(lines_cnt * sizeof(char *));
     if (lines == NULL) {
-        error_exit("Allocation of memory failed.");
+        error_exit("Allocation of memory failed.\n");
     }
     for (int i = 0; i < lines_cnt; i++) {
         lines[i] = (char *) malloc((MAX_LINE_LEN) * sizeof(char));
         if (lines[i] == NULL) {
-            error_exit("Allocation of memory failed.");
+            error_exit("Allocation of memory failed.\n");
         }
     }
     int line_idx = 0;
@@ -159,7 +159,7 @@ int output_skipping_tail(int lines_cnt, FILE* stream) {
     int lines_found = 0;
     char *line = (char *) malloc((MAX_LINE_LEN) * sizeof(char));
     if (line == NULL) {
-        error_exit("Allocation of memory failed.");
+        error_exit("Allocation of memory failed.\n");
     }
     while (fgets(line, MAX_LINE_LEN, stream)) {
         lines_found++;

@@ -23,7 +23,7 @@ htab_t *htab_init(size_t n) {
     hashtable->size = 0;
     hashtable->arr_size = n; // set the hashtable bucket count
 
-    // set each item to NULL
+    // set each item to NULL; n + 1 is needed for htab_end(t)
     for (size_t i = 0; i < n + 1; i++) {
         hashtable->items[i] = NULL;
     }

@@ -37,7 +37,6 @@ htab_iterator_t htab_lookup_add(htab_t *t, htab_key_t key) {
     htab_item_t *item = item_init(t, key);
     if (item == NULL) {
         return htab_end(t);  // allocation of memory failed
-        t->size--;
     }
     it.ptr = item;
 

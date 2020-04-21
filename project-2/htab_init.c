@@ -12,10 +12,12 @@
 #include "private.h"
 
 // Initializes a hashatble with passed bucket count.
+// N must be an integer value greater than zero.
 htab_t *htab_init(size_t n) {
     // allocate hashtable
     htab_t *hashtable = (htab_t *) malloc(sizeof(htab_t) + sizeof(htab_item_t) * n);
-    if (hashtable == NULL) {
+    if (hashtable == NULL || n <= 0) {
+        free(hashtable);
         return NULL;  // allocation of memory failed
     }
     hashtable->size = 0;

@@ -17,6 +17,8 @@ htab_item_t *item_init(htab_t *t, htab_key_t key) {
     htab_item_t *item = (htab_item_t *) malloc(sizeof(htab_item_t));
     char *keymem = malloc(strlen(key) + sizeof(char));
     if (item == NULL || keymem == NULL) {
+        free(item);
+        free(keymem);
         return NULL;
     }
     strcpy(keymem, key);

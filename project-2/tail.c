@@ -175,6 +175,7 @@ int output_skipping_tail(int lines_cnt, FILE* stream) {
             }
         }
     }
+    free(line);
     return retcode;
 }
 

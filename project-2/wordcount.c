@@ -19,6 +19,11 @@
       than the count of entries it lowers the time efficiency significantly.
 */
 
+/* General notes:
+    - I am not using htab_erase() and htab_Find() in my implementation
+    in place of incereased efficiency but I tested these function nonetheless.
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -27,7 +32,7 @@
 #include "io.h"
 
 /* Notes to TABLE_SIZE:
-    - defined this size so the disrtibution is alright and size
+    - defined this size 100k so the disrtibution is alright and size
       is not very large but allows adequate speed
     - if the number of keys is significantly larger than this limit
       it would be advised to raise it accordingly.
@@ -91,6 +96,7 @@ int main() {
             htab_iterator_t iter = htab_lookup_add(t, word);
             if (!htab_iterator_valid(iter)) {
                 fprintf(stderr, "ERROR: Allocation of memory failed.\n");
+                htab_free(t);
                 return EXIT_ERROR;
             }
         }

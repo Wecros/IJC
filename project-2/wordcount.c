@@ -87,6 +87,9 @@ void htab_output(const htab_t *t) {
 //     htab_lookup_add(t, "wec");
 //     htab_lookup_add(t, "wec");
 //     htab_lookup_add(t, "3");
+//     htab_lookup_add(t, "wec");
+//     htab_lookup_add(t, "wec");
+//     htab_lookup_add(t, "wec");
 //     htab_lookup_add(t, "2");
 //     htab_lookup_add(t, "wec");
 
@@ -121,8 +124,8 @@ int main() {
         fprintf(stderr, "ERROR: Allocation of memory failed.");
         return EXIT_ERROR;
     }
-    int exitcode = EXIT_SUCCESS;
 
+    int exitcode = EXIT_SUCCESS;
     int retcode = 0;
     while (retcode != EOF) {
         char word[MAX_WORD_LEN] = "\0";

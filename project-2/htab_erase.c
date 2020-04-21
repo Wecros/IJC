@@ -20,21 +20,21 @@ void htab_erase(htab_t *t, htab_iterator_t it) {
         htab_iterator_t prev = htab_end(t);
         htab_iterator_t del_it = it;
         htab_iterator_t it = iterator_init(t, del_it.idx);
-        printf("%d:%d\n", it.idx, del_it.idx);
+        // printf("%d:%d\n", it.idx, del_it.idx);
         while (it.idx == del_it.idx) {
-            printf("Coming through. %s: %d, %s: %d\n", it.ptr->key, it.ptr->count, del_it.ptr->key, del_it.ptr->count);
+            // printf("Coming through. %s: %d, %s: %d\n", it.ptr->key, it.ptr->count, del_it.ptr->key, del_it.ptr->count);
             if (htab_iterator_equal(it, del_it)) {
-                printf("Deleting.\n");
+                // printf("Deleting.\n");
                 if (it.ptr->next != NULL && htab_iterator_valid(prev)){
                     // relink the next entry to the previous on
-                    printf("\tRelinking.\n");
+                    // printf("\tRelinking.\n");
                     prev.ptr->next = it.ptr->next;
                 } else if (htab_iterator_valid(prev)) {  // destroy the link of the previous pointer
-                    printf("\tDestroying link.\n");
+                    // printf("\tDestroying link.\n");
                     prev.ptr->next = NULL;
                 } else {
                     if (it.ptr->next != NULL) {
-                        printf("\tBase pointing to the next one.\n");
+                        // printf("\tBase pointing to the next one.\n");
                         t->items[it.idx] = it.ptr->next;
                     }
                 }

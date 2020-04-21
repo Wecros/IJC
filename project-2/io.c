@@ -35,7 +35,8 @@ Poznámka: Vhodný soubor pro testování je například seznam slov
 
 
 /**
- * @brief
+ * @brief Loads the word from specified stream and saves it to
+ *        the specified character pointer, max length needed.
  * @param s Pointer to a char variable.
  * @param max Maximum length of a word.
  * @param f Pointer to file stream.
@@ -47,10 +48,10 @@ int get_word(char *s, int max, FILE *f) {
     char c;
     bool charFound = false;
     int charIndex = 0;
-    static bool warningPrinted = false;
+    static bool warningPrinted = false;  // static, print only one warning
 
     while ((c = fgetc(f)) != EOF) {
-        if (charIndex > max) {
+        if (charIndex >= max && !isspace(c)) {
             if (!warningPrinted) {
                 warningPrinted = true;
                 fprintf(stderr, "Encountered word longer than 127 characters, "

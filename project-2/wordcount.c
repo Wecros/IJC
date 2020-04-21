@@ -1,7 +1,7 @@
 /**
  * @file wordcount.c
  * @author Marek Filip (xfilip46), FIT BUT
- * @date 2020-Apr-15
+ * @date 2020-Apr-21
  * @brief IJC-DU2, příklad b)
  * @details The assigment is to rewrite a C++ program to pure C.
  *          The program counts the frequency of words in the output text.

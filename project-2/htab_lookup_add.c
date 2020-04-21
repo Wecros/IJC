@@ -1,7 +1,7 @@
 /**
  * @file htab_lookup_add.c
  * @author Marek Filip (xfilip46), FIT BUT
- * @date 2020-Apr-15
+ * @date 2020-Apr-21
  * @brief IJC-DU2, příklad b)
  * @details Lookup or add a specified entry to hashtable.
  *          Function is in its own module so it can be changed in

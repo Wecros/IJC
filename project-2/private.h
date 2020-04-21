@@ -1,7 +1,7 @@
 /**
  * @file private.h
  * @author Marek Filip (xfilip46), FIT BUT
- * @date 2020-Apr-15
+ * @date 2020-Apr-21
  * @brief IJC-DU2, příklad b)
  * @details Header file for defining private structs and functions.
  *          Compiled: gcc 9.3

@@ -1,14 +1,11 @@
 /**
  * @file private.h
  * @author Marek Filip (xfilip46), FIT BUT
- * @date 2020-Apr-15
+ * @date 2020-Apr-21
  * @brief IJC-DU2, příklad b)
  * @details Module file for defining functions.
  *          Compiled: gcc 9.3
  */
-
-#include <stdio.h> // TODO: remove
-#include <string.h>
 
 #include "private.h"
 

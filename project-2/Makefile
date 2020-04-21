@@ -1,14 +1,11 @@
 # @file Makefile
 # @author Marek Filip (xfilip46), FIT BUT
-# @date 31/Mar/2020
+# @date 2020-Apr-21
 # @brief IJC-DU2, příklad a), b)
 # @details Makefile for IJC project. Tries to use general makefile rules.
 #		   Project only recompiles when some file changes.
 #          Compiled: gcc 9.3
 
-# Napište soubor Makefile tak, aby příkaz make vytvořil programy
-# "tail", "wordcount", "wordcount-dynamic" a knihovny "libhtab.a",
-# "libhtab.so" (nebo "htab.dll" atd.).
 LOGIN = xfilip46
 ZIP_FILE = $(LOGIN).zip
 

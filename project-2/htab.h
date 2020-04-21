@@ -1,7 +1,7 @@
 /**
  * @file htab.h
  * @author Public Domain, used by: Marek Filip (xfilip46), FIT BUT
- * @date 2020-Apr-15
+ * @date 2020-Apr-21
  * @brief IJC-DU2, příklad b)
  * @details API for hashtable.
  *          Compiled: gcc 9.3

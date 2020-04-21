@@ -1,7 +1,7 @@
 /**
  * @file htab_hash_fun.c
  * @author Marek Filip (xfilip46), FIT BUT
- * @date 2020-Apr-15
+ * @date 2020-Apr-21
  * @brief IJC-DU2, příklad b)
  * @details Hashing function for the hashtable.
  *          Function is in its own module so it can be changed in

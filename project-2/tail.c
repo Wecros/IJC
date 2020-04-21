@@ -133,6 +133,9 @@ int output_standard_tail(int lines_cnt, FILE *stream) {
             retcode = EXIT_LONG_LINE;
         }
     }
+    if (lines_found == 0) {
+        return retcode; // empty file
+    }
     // number of entered lines to print is larger than count of lines in file
     if (lines_cnt > lines_found) {
         line_idx %= lines_found;  // adjust the line index

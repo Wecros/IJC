@@ -14,8 +14,9 @@
 // Returns an iterator pointing to the first nonnull entry in hastable.
 htab_iterator_t htab_begin(const htab_t *t) {
     htab_iterator_t it = iterator_init(t, 0);
-    // go through indeces until you find an entry, return htab_end if not found
-    while (!htab_iterator_valid(it)) {
+    htab_iterator_t end_it = htab_end(t);
+    // go through indeces till you find entry, return htab_end if nothing found
+    while (!htab_iterator_valid(it) && it.idx != end_it.idx) {
         it = htab_iterator_next(it);
     }
     return it;

@@ -14,7 +14,7 @@ ZIP_FILE = $(LOGIN).zip
 
 CC = gcc
 CXX = g++
-CFLAGS   = -g -std=c99 -pedantic -Wall -Wextra
+CFLAGS   = -g -std=c99 -pedantic -Wall -Wextra -0g
 # CFLAGS  += -O2
 CFLAGS  += $(SYMBOL) # use my own hash function, add var from CLI
 CXXFLAGS = -std=c++17 -pedantic -Wall -Wextra

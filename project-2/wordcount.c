@@ -30,7 +30,7 @@ What I found when comparing times between C and C++ versions:
 
 // defined this size so the disrtibution is alright and size
 // is not very large but allows adequate speed
-#define TABLE_SIZE      10000
+#define TABLE_SIZE      100000
 #define MAX_WORD_LEN    127
 #define EXIT_SUCCESS    0   // exited normally
 #define EXIT_LONG_WORD  1   // exited with encountered word over limit
@@ -71,52 +71,6 @@ void htab_output(const htab_t *t) {
         it = htab_iterator_next(it);
     }
 }
-
-// int main() {
-//     htab_t *t = htab_init(1);
-//     if (t == NULL) {
-//         fprintf(stderr, "ERROR: Allocation of memory failed.");
-//         return EXIT_ERROR;
-//     }
-
-//     htab_lookup_add(t, "1");
-//     htab_iterator_t it_1 = htab_lookup_add(t, "2");  // TODO: try variable on this one
-//     htab_iterator_t it_3 = htab_lookup_add(t, "3");
-//     htab_iterator_t it_2 = htab_lookup_add(t, "2");
-//     htab_lookup_add(t, "wec");
-//     htab_lookup_add(t, "wec");
-//     htab_lookup_add(t, "wec");
-//     htab_lookup_add(t, "3");
-//     htab_lookup_add(t, "wec");
-//     htab_lookup_add(t, "wec");
-//     htab_lookup_add(t, "wec");
-//     htab_lookup_add(t, "2");
-//     htab_lookup_add(t, "wec");
-
-//     // printf("idx: %d, \"%s\":%d, ptr:%p ptr->next:%p\n",
-//     //         it_1.idx, it_1.ptr->key, htab_iterator_get_value(it_1),
-//     //         it_1.ptr, it_1.ptr->next);
-//     // printf("idx: %d, \"%s\":%d, ptr:%p ptr->next:%p\n",
-//     //         it_2.idx, it_2.ptr->key, htab_iterator_get_value(it_2),
-//     //         it_2.ptr, it_2.ptr->next);
-
-//     #ifdef DEBUG
-//     htab_dump(t);
-//     #endif
-//     // htab_erase(t, it_1);
-//     // htab_erase(t, htab_find(t, "1"));
-//     // htab_erase(t, htab_find(t, "3"));
-
-//     htab_clear(t);
-
-//     #ifdef DEBUG
-//     htab_dump(t);
-//     #endif
-
-//     free(t);
-
-//     return EXIT_SUCCESS;
-// }
 
 int main() {
     htab_t *t = htab_init(TABLE_SIZE);

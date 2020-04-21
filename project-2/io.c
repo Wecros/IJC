@@ -60,6 +60,7 @@ int get_word(char *s, int max, FILE *f) {
             while (!isspace(c) && c != EOF) {
                 c = fgetc(f);
             }
+            s[charIndex] = '\0';  // we need to terminate the string
             return 1;
         } else if (isspace(c) && charFound) {
             break;  // break out of the loop if char is space and word found
@@ -70,6 +71,7 @@ int get_word(char *s, int max, FILE *f) {
             charIndex++;
         }
     }
+    s[charIndex] = '\0';  // we need to terminate the string
 
     if (c == EOF) {
         return EOF;

@@ -40,10 +40,9 @@ void item_free(htab_t *t, htab_item_t *item) {
 
 htab_iterator_t iterator_init(const htab_t *t, const size_t idx) {
     htab_iterator_t it = { t->items[idx], t, idx };
-    if (idx >= t->arr_size) {
+    if (idx >= htab_bucket_count(t)) {
         it.ptr = NULL;
     }
-    it.idx = idx;
     return it;
 }
 

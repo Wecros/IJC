@@ -9,8 +9,6 @@
  *          Compiled: gcc 9.3
  */
 
-#include <string.h>
-
 #include "private.h"
 
 // Initializes a hashatble with passed bucket count.

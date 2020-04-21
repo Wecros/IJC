@@ -9,8 +9,6 @@
  *          Compiled: gcc 9.3
  */
 
-#include <string.h>
-
 #include "private.h"
 
 // Returns a count of entries of the hashtable.

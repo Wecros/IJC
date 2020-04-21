@@ -8,16 +8,16 @@
  */
 
 #include <string.h>  // size_t
-#include <stdlib.h>  // malloc
+#include <stdlib.h>  // malloc, free
 
 #include "htab.h"
 
 typedef struct htab_item htab_item_t;
 
 struct htab_item {
-    htab_key_t key;
-    size_t count;
-    struct htab_item *next;
+    htab_key_t key; // hash key
+    size_t count;   // entry count
+    struct htab_item *next; // pointer to the next item in a bucket
 };
 
 struct htab {

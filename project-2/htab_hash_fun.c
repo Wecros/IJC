@@ -9,9 +9,7 @@
  *          Compiled: gcc 9.3
  */
 
-#include <string.h>
 #include <inttypes.h>
-
 #include "private.h"
 
 // Uniform distribution hash function (sdbm) for hashtable, returns a hash num

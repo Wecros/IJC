@@ -10,7 +10,6 @@
  */
 
 #include "private.h"
-#include <stdio.h>  // TODO: remove
 
 // Returns an iterator containing the specified key. Creates a new entry
 // in the hashtable and returns appropriate iterator if key not found.

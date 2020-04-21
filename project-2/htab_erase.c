@@ -9,7 +9,6 @@
  *          Compiled: gcc 9.3
  */
 
-#include <stdio.h>
 #include "private.h"
 
 // Removes a specified entry from hashtable, doesn't change the iterator.
